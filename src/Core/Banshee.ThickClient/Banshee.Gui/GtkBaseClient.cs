@@ -104,10 +104,6 @@ namespace Banshee.Gui
         {
             Log.Debug ("Initializing GTK");
 
-            if (!GLib.Thread.Supported) {
-                GLib.Thread.Init ();
-            }
-
 #if GNOME
             // Using GConf from multiple threads causes crashes if multithreading is not initialized explictly in dbus
             // This is a workaround for bgo#692374
@@ -316,6 +312,21 @@ namespace Banshee.Gui
         protected bool IdleTimeoutRemove (uint id)
         {
             return GLib.Source.Remove (id);
+        }
+
+        bool _disposed;
+
+        protected override void Dispose (bool disposing)
+        {
+            if (_disposed) return;
+
+            _disposed = true;
+
+            base.Dispose (disposing);
+
+            if (disposing) {
+                Gtk.Application.Quit ();
+            }
         }
     }
 }

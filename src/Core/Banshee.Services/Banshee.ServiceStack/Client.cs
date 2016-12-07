@@ -38,7 +38,18 @@ namespace Banshee.ServiceStack
         {
         }
 
-        public virtual void Dispose ()
+        ~Client ()
+        {
+            Dispose (false);
+        }
+
+        public void Dispose ()
+        {
+            GC.SuppressFinalize (this);
+            Dispose (true);
+        }
+
+        protected virtual void Dispose (bool disposing)
         {
         }
 

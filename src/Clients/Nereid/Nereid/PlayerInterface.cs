@@ -157,7 +157,6 @@ namespace Nereid
                     Hide ();
                 }
                 base.Dispose (disposing);
-                Gtk.Application.Quit ();
             }
         }
 
