@@ -47,22 +47,6 @@ namespace Banshee.Gui.Widgets
 {
     public class CoverArtDisplay : TrackInfoDisplay
     {
-        private ImageSurface idle_album;
-
-        public CoverArtDisplay ()
-        {
-        }
-
-        protected override void Dispose (bool disposing)
-        {
-            var disposable = idle_album as IDisposable;
-            if (disposable != null) {
-                disposable.Dispose ();
-            }
-
-            base.Dispose (disposing);
-        }
-
         protected override int ArtworkSizeRequest {
             get { return Allocation.Width; }
         }
@@ -75,14 +59,9 @@ namespace Banshee.Gui.Widgets
             get { return true; }
         }
 
-        protected override void RenderIdle (Cairo.Context cr)
+        protected override void RenderIdle (Context cr)
         {
-            idle_album = idle_album ?? PixbufImageSurface.Create (Banshee.Gui.IconThemeUtils.LoadIcon (
-                ArtworkSizeRequest, MissingAudioIconName), true);
-
-            ArtworkRenderer.RenderThumbnail (cr, idle_album, false, 0, 0,
-                ArtworkSizeRequest, ArtworkSizeRequest,
-                false, 0, true, BackgroundColor);
+            ArtworkRenderer.RenderThumbnail (cr, null, false, 0, 0, ArtworkSizeRequest, ArtworkSizeRequest, false, 0, true, BackgroundColor);
         }
     }
 }
