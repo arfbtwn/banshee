@@ -9,4 +9,8 @@ SOURCES =  \
 
 RESOURCES = Banshee.LibraryWatcher.addin.xml
 
+if ENABLE_LIBRARYWATCHER
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif

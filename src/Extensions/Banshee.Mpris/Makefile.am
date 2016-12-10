@@ -13,5 +13,9 @@ SOURCES =  \
 
 RESOURCES = Banshee.Mpris.addin.xml
 
+if ENABLE_MPRIS
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

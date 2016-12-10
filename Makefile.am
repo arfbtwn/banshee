@@ -60,20 +60,22 @@ PROFILE_DEFAULT=--profile=log:time=fast,calls,noalloc,maxframes=5
 PROFILE_HEAP=--profile=logging:heap=all,gc-dumps=-1
 PROFILE_GUI=--profile=gui-thread-check
 
+RUN_DEFAULT=--debug --uninstalled
+
 run: check-bootstrap-env $(MO_FILES)
-	(cd bin; $(MONO) --debug $(PROFILE_GUI) $(BANSHEE_DEV_MONO_OPTIONS) Nereid.exe --debug --uninstalled $(BANSHEE_DEV_OPTIONS))
+	(cd bin; $(MONO) --debug $(PROFILE_GUI) $(BANSHEE_DEV_MONO_OPTIONS) Nereid.exe $(RUN_DEFAULT) $(BANSHEE_DEV_OPTIONS))
 
 run-profiled: check-bootstrap-env $(MO_FILES)
 	(cd bin; LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):/usr/local/lib $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) $(PROFILE_DEFAULT) Nereid.exe --uninstalled $(BANSHEE_DEV_OPTIONS))
 
 run-logged: check-bootstrap-env $(MO_FILES)
-	(cd bin; $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) Nereid.exe --debug --uninstalled $(BANSHEE_DEV_OPTIONS) | tee last-run-log)
+	(cd bin; $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) Nereid.exe $(RUN_DEFAULT) $(BANSHEE_DEV_OPTIONS) | tee last-run-log)
 
 run-mediapanel: check-bootstrap-env $(MO_FILES)
-	(cd bin; $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) MediaPanel.exe --debug --uninstalled $(BANSHEE_DEV_OPTIONS))
+	(cd bin; $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) MediaPanel.exe $(RUN_DEFAULT) $(BANSHEE_DEV_OPTIONS))
 
 run-muinshee: check-bootstrap-env $(MO_FILES)
-	(cd bin; $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) Muinshee.exe --debug --uninstalled $(BANSHEE_DEV_OPTIONS))
+	(cd bin; $(MONO) --debug $(BANSHEE_DEV_MONO_OPTIONS) Muinshee.exe $(RUN_DEFAULT) $(BANSHEE_DEV_OPTIONS))
 
 run-perf: run-logged
 	extras/perf-analyze-log bin/last-run-log
@@ -84,7 +86,7 @@ run-trace: $(MO_FILES)
 		Nereid.exe --uninstalled $(BANSHEE_DEV_OPTIONS) > ../banshee.trace)
 
 run-profile-heap: $(MO_FILES)
-	(cd bin; $(MONO) $(PROFILE_HEAP) --debug $(BANSHEE_DEV_MONO_OPTIONS) Nereid.exe --debug --uninstalled $(BANSHEE_DEV_OPTIONS))
+	(cd bin; $(MONO) $(PROFILE_HEAP) --debug $(BANSHEE_DEV_MONO_OPTIONS) Nereid.exe $(RUN_DEFAULT) $(BANSHEE_DEV_OPTIONS))
 
 query-trace:
 	@echo "Did you set BANSHEE_DEV_MONO_OPTIONS to --trace=disabled?"; \

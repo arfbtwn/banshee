@@ -9,7 +9,9 @@ SOURCES =  \
 
 RESOURCES = Banshee.Sample.addin.xml
 
+if ENABLE_SAMPLE
+include $(top_srcdir)/build/build.mk
+else
 include $(top_srcdir)/build/build.dist.mk
-
-# include $(top_srcdir)/build/build.mk
+endif
 

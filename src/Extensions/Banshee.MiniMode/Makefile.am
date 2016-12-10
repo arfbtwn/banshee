@@ -10,5 +10,9 @@ SOURCES =  \
 
 RESOURCES = Banshee.MiniMode.addin.xml
 
+if ENABLE_MINIMODE
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

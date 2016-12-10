@@ -34,4 +34,8 @@ RESOURCES =  \
 	Resources/HomeSourceActiveUI.xml \
 	Resources/SearchSourceActiveUI.xml
 
+if ENABLE_INTERNETARCHIVE
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif

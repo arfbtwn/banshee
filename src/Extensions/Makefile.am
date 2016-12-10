@@ -36,7 +36,6 @@ SUBDIRS = \
 	Banshee.Wikipedia \
 	Banshee.YouTube
 
-
 MAINTAINERCLEANFILES = Makefile.in
 
 uninstall-hook:

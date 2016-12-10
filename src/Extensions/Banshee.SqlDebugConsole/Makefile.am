@@ -9,6 +9,8 @@ RESOURCES =  \
 	Banshee.SqlDebugConsole.addin.xml \
 	Resources/GlobalUI.xml
 
+if ENABLE_SQLDEBUGCONSOLE
+include $(top_srcdir)/build/build.mk
+else
 include $(top_srcdir)/build/build.dist.mk
-
-#include $(top_srcdir)/build/build.mk
+endif

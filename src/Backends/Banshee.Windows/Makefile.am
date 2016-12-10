@@ -1,3 +1,8 @@
+ASSEMBLY = Banshee.Windows
+TARGET = library
+LINK = $(REF_BACKEND_WINDOWS)
+INSTALL_DIR = $(BACKENDS_INSTALL_DIR)
+
 SOURCES =  \
 	Banshee.Windows/ExtensionsForGtkAction.cs \
 	Banshee.Windows/GtkWindowThumbnailToolbarManager.cs \
@@ -14,4 +19,9 @@ SOURCES =  \
 
 RESOURCES = Banshee.Windows.addin.xml
 
+if PLATFORM_WINDOWS
+include $(top_srcdir)/build/build.rules.mk
+else
 include $(top_srcdir)/build/build.dist.mk
+endif
+

@@ -14,7 +14,11 @@ RESOURCES = Banshee.Emusic.addin.xml
 mimedir = $(datadir)/mime/packages
 mime_DATA = banshee-emx.xml
 
+if ENABLE_EMUSIC
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 
 EXTRA_DIST += banshee-emx.xml
 

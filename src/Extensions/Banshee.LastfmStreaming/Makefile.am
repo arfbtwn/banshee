@@ -17,5 +17,9 @@ RESOURCES =  \
 	Resources/GlobalUI.xml \
 	Resources/LastfmTrackActions.xml
 
+if ENABLE_LASTFMSTREAMING
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

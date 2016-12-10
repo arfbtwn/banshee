@@ -11,7 +11,11 @@ SOURCES =  \
 RESOURCES = Banshee.Emusic.Store.addin.xml
 
 if HAVE_LIBWEBKIT
+if ENABLE_EMUSIC_STORE
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 else
 include $(top_srcdir)/build/build.dist.mk
 endif

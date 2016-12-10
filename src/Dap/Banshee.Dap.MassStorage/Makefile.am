@@ -19,5 +19,9 @@ SOURCES =  \
 
 RESOURCES = Banshee.Dap.MassStorage.addin.xml
 
+if ENABLE_DAP_MASS_STORAGE
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

@@ -25,5 +25,9 @@ RESOURCES =  \
 	Resources/GlobalUI.xml \
 	Resources/GlobalUI_Dvd.xml
 
+if ENABLE_OPTICALDISC
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

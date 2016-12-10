@@ -14,12 +14,7 @@ RESOURCES = \
     Banshee.RemoteAudio.addin.xml \
     Resources/GlobalUI.xml
 
-run:
-	pushd $(top_builddir); \
-	make run; \
-	popd;
-
-if REMOTE_AUDIO_ENABLED
+if ENABLE_REMOTEAUDIO
 include $(top_srcdir)/build/build.mk
 else
 include $(top_srcdir)/build/build.dist.mk

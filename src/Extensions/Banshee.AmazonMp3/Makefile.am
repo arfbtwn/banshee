@@ -23,7 +23,11 @@ mime_DATA = banshee-amz.xml
 bamz: bamz.in
 	@echo '  GEN   $@'; sed 's,@bansheedir@,$(pkglibdir),g' < $< > $@
 
+if ENABLE_AMAZONMP3
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 
 CLEANFILES += bamz
 EXTRA_DIST += bamz.in banshee-amz.xml

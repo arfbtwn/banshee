@@ -30,8 +30,7 @@ AC_INIT([banshee], banshee_version, [http://bugzilla.gnome.org/enter_bug.cgi?pro
 AM_INIT_AUTOMAKE([1.10 no-dist-gzip dist-bzip2 tar-ustar foreign])
 AM_MAINTAINER_MODE([enable])
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_MACRO_DIR([build/m4])
-AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/shamrock -I build/m4/banshee -I build/m4/shave \${ACLOCAL_FLAGS}"])
+AC_CONFIG_MACRO_DIRS([build/m4 build/m4/banshee build/m4/banshee/backends build/m4/banshee/clients build/m4/banshee/dap build/m4/banshee/extensions build/m4/shamrock build/m4/shave])
 
 IT_PROG_INTLTOOL([0.35.0])
 AC_PROG_LIBTOOL
@@ -90,12 +89,6 @@ SHAMROCK_CHECK_MONODOC
 dnl webkit (optional through --disable-webkit)
 BANSHEE_CHECK_LIBWEBKIT
 
-dnl gdata (optional through --disable-youtube)
-BANSHEE_CHECK_YOUTUBE
-
-dnl gio#
-BANSHEE_CHECK_GIO_SHARP
-
 dnl Moonlight (optional through --enable-moonlight)
 BANSHEE_CHECK_MOONLIGHT
 
@@ -105,26 +98,29 @@ SHAMROCK_CHECK_NUNIT
 dnl External TagLib# libraries (optional)
 BANSHEE_CHECK_TAGLIB_SHARP
 
-dnl OS X (optional through --enable-osx)
+dnl Platform support
+BANSHEE_CHECK_UNIX
+BANSHEE_CHECK_WINDOWS
 BANSHEE_CHECK_OSX
 
-dnl Mono.Upnp libraries
-BANSHEE_CHECK_MONO_UPNP
+dnl GNOME (optional)
+BANSHEE_CHECK_GNOME
 
 PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.8.1)
 
-dnl GNOME (optional)
-AC_ARG_ENABLE(gnome, AC_HELP_STRING([--disable-gnome], [Disable GNOME support]), , enable_gnome="yes")
-if test "x$enable_gnome" = "xyes"; then
-	BANSHEE_CHECK_GNOME_SHARP
-	BANSHEE_CHECK_GCONF
-	AM_CONDITIONAL(ENABLE_GNOME, true)
-else
-	AM_CONDITIONAL(GCONF_SCHEMAS_INSTALL, false)
-	AM_CONDITIONAL(ENABLE_GNOME, false)
-fi
+dnl Clients
+BANSHEE_CHECK_CLIENT_NEREID
+BANSHEE_CHECK_CLIENT_HALIE
+BANSHEE_CHECK_CLIENT_BEROE
+BANSHEE_CHECK_CLIENT_MEDIAPANEL
+BANSHEE_CHECK_CLIENT_MUINSHEE
+
+dnl Hardware: gio#
+BANSHEE_CHECK_GIO_SHARP
 
 dnl DAP support (each module is optional)
+BANSHEE_CHECK_DAP
+BANSHEE_CHECK_DAP_MASS_STORAGE
 BANSHEE_CHECK_DAP_MTP
 BANSHEE_CHECK_DAP_APPLEDEVICE
 BANSHEE_CHECK_DAP_KARMA
@@ -132,20 +128,46 @@ BANSHEE_CHECK_DAP_KARMA
 dnl DAAP support (optional)
 BANSHEE_CHECK_DAAP
 
-dnl RemoteAudio support (optional)
-BANSHEE_CHECK_REMOTE_AUDIO
-
-dnl MonoTorrent support (optional)
-BANSHEE_CHECK_TORRENT
-
 dnl Sound menu integration (optional)
 BANSHEE_CHECK_SOUNDMENU
 
-dnl Ubuntu One Music Store (optional)
-BANSHEE_CHECK_UBUNTUONE
-
-dnl Boo (optional)
-BANSHEE_CHECK_BOO
+dnl Extensions
+BANSHEE_CHECK_EXTENSION_AMAZONMP3
+BANSHEE_CHECK_EXTENSION_AMAZONMP3_STORE
+BANSHEE_CHECK_EXTENSION_AUDIOBOOK
+BANSHEE_CHECK_EXTENSION_BOOSCRIPT
+BANSHEE_CHECK_EXTENSION_BPM
+BANSHEE_CHECK_EXTENSION_COVERART
+BANSHEE_CHECK_EXTENSION_DAAP
+BANSHEE_CHECK_EXTENSION_EMUSIC
+BANSHEE_CHECK_EXTENSION_EMUSIC_STORE
+BANSHEE_CHECK_EXTENSION_FILESYSTEMQUEUE
+BANSHEE_CHECK_EXTENSION_FIXUP
+BANSHEE_CHECK_EXTENSION_INTERNETARCHIVE
+BANSHEE_CHECK_EXTENSION_INTERNETRADIO
+BANSHEE_CHECK_EXTENSION_LASTFM
+BANSHEE_CHECK_EXTENSION_LASTFMSTREAMING
+BANSHEE_CHECK_EXTENSION_LIBRARYWATCHER
+BANSHEE_CHECK_EXTENSION_MEDIAPANEL
+BANSHEE_CHECK_EXTENSION_MINIMODE
+BANSHEE_CHECK_EXTENSION_MIROGUIDE
+BANSHEE_CHECK_EXTENSION_MPRIS
+BANSHEE_CHECK_EXTENSION_MULTIMEDIAKEYS
+BANSHEE_CHECK_EXTENSION_NOTIFICATIONAREA
+BANSHEE_CHECK_EXTENSION_NOWPLAYING
+BANSHEE_CHECK_EXTENSION_OPTICALDISC
+BANSHEE_CHECK_EXTENSION_PLAYERMIGRATION
+BANSHEE_CHECK_EXTENSION_PLAYQUEUE
+BANSHEE_CHECK_EXTENSION_PODCASTING
+BANSHEE_CHECK_EXTENSION_REMOTEAUDIO
+BANSHEE_CHECK_EXTENSION_SAMPLE
+BANSHEE_CHECK_EXTENSION_SOUNDMENU
+BANSHEE_CHECK_EXTENSION_SQLDEBUGCONSOLE
+BANSHEE_CHECK_EXTENSION_TORRENT
+BANSHEE_CHECK_EXTENSION_UBUNTUONE
+BANSHEE_CHECK_EXTENSION_UPNP
+BANSHEE_CHECK_EXTENSION_WIKIPEDIA
+BANSHEE_CHECK_EXTENSION_YOUTUBE
 
 dnl i18n
 SHAMROCK_CONFIGURE_I18N($PACKAGE)
@@ -336,26 +358,69 @@ ${PACKAGE}-${VERSION}
     GStreamer C backend:   ${enable_gst_native}
     Clutter:               ${enable_clutter}
 
-  Operating System/Desktop Environment:
-    GNOME Support:         ${enable_gnome}
+  Platform Support:
+    UNIX Support:          ${enable_unix}
+    Windows Support:       ${enable_windows}
     OSX Support:           ${enable_osx}
 
-  Digital Audio Player (DAP) Support:
-    Apple Device:          ${enable_appledevice} (libgpod-sharp)
-    Karma:                 ${enable_karmasharp}
-    Mass Storage:          yes
-    MTP:                   ${enable_libmtp}
-
-  Extra Features:
-    Web Browser:           ${have_libwebkit} (webkitgtk-3.0 >= $WEBKIT_MIN_VERSION, libsoup-2.4 >= $SOUP_MIN_VERSION)
-    DAAP:                  ${enable_daap}
+    GNOME Support:         ${enable_gnome}
     GIO Backend:           ${enable_gio} (gio-sharp >= $GIOSHARP_REQUIRED)
     GIO Hardware:          ${enable_gio_hardware} (gudev-sharp >= $GUDEVSHARP_REQUIRED)
-    YouTube:               ${enable_youtube} (gdata-sharp >= $GDATASHARP_REQUIRED_VERSION)
+
+  Clients:
+    Beroe:                 ${enable_beroe}
+    Halie:                 ${enable_halie}
+    MediaPanel:            ${enable_mediapanel}
+    Muinshee:              ${enable_muinshee}
+    Nereid:                ${enable_nereid}
+
+  DAP Support:             ${enable_dap}
+    Apple Device:          ${enable_appledevice} (libgpod-sharp)
+    Karma:                 ${enable_karma} (libkarma-sharp)
+    Mass Storage:          ${enable_mass_storage}
+    MTP:                   ${enable_mtp} (libmtp)
+
+  Extra Features:
+    DAAP Support:          ${with_daap} (mono-zeroconf >= $MZC_REQUIRED)
+    Web Browser:           ${with_webkit} (webkitgtk-3.0 >= $WEBKIT_MIN_VERSION, libsoup-2.4 >= $SOUP_MIN_VERSION)
+
+  Extensions:
+    AmazonMp3:             ${enable_amazonmp3}
+    AmazonMp3.Store:       ${enable_amazonmp3_store}
+    Audiobook:             ${enable_audiobook}
+    Boo Scripting:         ${enable_booscript} (boo >= $BOO_REQUIRED)
+    Bpm:                   ${enable_bpm}
+    CoverArt:              ${enable_coverart}
+    DAAP:                  ${enable_daap}
+    Emusic:                ${enable_emusic} 
+    Emusic.Store:          ${enable_emusic_store}
+    FileSystemQueue:       ${enable_filesystemqueue}
+    Fixup:                 ${enable_fixup}
+    InternetArchive:       ${enable_internetarchive}
+    InternetRadio:         ${enable_internetradio}
+    Lastfm:                ${enable_lastfm}
+    LastfmStreaming:       ${enable_lastfmstreaming}
+    LibraryWatcher:        ${enable_librarywatcher}
+    MediaPanel:            ${enable_mediapanel}
+    MiniMode:              ${enable_minimode}
+    MiroGuide:             ${enable_miroguide}
+    Mpris:                 ${enable_mpris}
+    MultimediaKeys:        ${enable_multimediakeys}
+    NotificationArea:      ${enable_notificationarea}
+    NowPlaying:            ${enable_nowplaying}
+    OpticalDisc:           ${enable_opticaldisc}
+    PlayerMigration:       ${enable_playermigration}
+    PlayQueue:             ${enable_playqueue}
+    Podcasting:            ${enable_podcasting}
+    RemoteAudio:           ${enable_remoteaudio}
+    Sample:                ${enable_sample}
     Sound Menu:            ${enable_soundmenu}
+    SqlDebugConsole:       ${enable_sqldebugconsole}
+    Torrent:               ${enable_torrent} (monotorrent-dbus >= $MTD_VERSION)
     Ubuntu One Store:      ${enable_ubuntuone} (ubuntuone-sharp >= $UBUNTUONESHARP_REQUIRED)
     UPnP:                  ${enable_upnp} (mono-upnp >= $MONOUPNP_REQUIRED)
-    Boo Scripting:         ${enable_boo} (boo >= $BOO_REQUIRED)
+    Wikipedia:             ${enable_wikipedia}
+    YouTube:               ${enable_youtube} (gdata-sharp >= $GDATASHARP_REQUIRED_VERSION)
 
   Build/Development:
     Unit Tests:            ${do_tests} (nunit >= ${NUNIT_REQUIRED})

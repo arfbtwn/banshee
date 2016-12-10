@@ -11,7 +11,7 @@ RESOURCES = Banshee.Torrent.addin.xml
 
 EXTRA_BUNDLE = $(MONOTORRENT_ASSEMBLIES)
 
-if HAVE_MONOTORRENT_DBUS
+if ENABLE_TORRENT
 include $(top_srcdir)/build/build.mk
 
 install-data-hook:
@@ -23,7 +23,7 @@ uninstall-hook:
 	for ASM in $(MONOTORRENT_ASSEMBLIES); do \
 		rm -f $(DESTDIR)$(moduledir)/`basename $$ASM`; \
 	done;
+
 else
 include $(top_srcdir)/build/build.dist.mk
 endif
-
