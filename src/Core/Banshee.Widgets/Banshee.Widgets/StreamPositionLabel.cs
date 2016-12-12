@@ -74,23 +74,10 @@ namespace Banshee.Widgets
                 layout.Dispose ();
             }
 
+            last_text = null;
             layout = new Pango.Layout (PangoContext);
             layout.FontDescription = PangoContext.FontDescription;
             layout.Ellipsize = Pango.EllipsizeMode.None;
-        }
-
-        private bool first_style_set = false;
-
-        protected override void OnStyleUpdated ()
-        {
-            base.OnStyleUpdated ();
-
-            if (first_style_set) {
-                BuildLayouts ();
-                UpdateLabel ();
-            }
-
-            first_style_set = true;
         }
 
         protected override void OnGetPreferredHeight (out int minimum_height, out int natural_height)
