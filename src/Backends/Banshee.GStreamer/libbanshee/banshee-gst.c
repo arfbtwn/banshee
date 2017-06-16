@@ -39,6 +39,7 @@
 #include <gst/pbutils/pbutils.h>
 
 #include "banshee-gst.h"
+#include "banshee-player-private.h"
 
 static gboolean gstreamer_initialized = FALSE;
 static gboolean banshee_debugging;
@@ -69,6 +70,7 @@ gstreamer_deinitialize ()
         return;
     }
 
+    bp_debug ("Deinitializing GStreamer");
     gst_deinit();
 
     gstreamer_initialized = FALSE;
