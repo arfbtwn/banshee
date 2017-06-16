@@ -62,6 +62,18 @@ gstreamer_initialize (gboolean debugging, BansheeLogHandler log_handler)
     gstreamer_initialized = TRUE;
 }
 
+MYEXPORT void
+gstreamer_deinitialize ()
+{
+    if (!gstreamer_initialized) {
+        return;
+    }
+
+    gst_deinit();
+
+    gstreamer_initialized = FALSE;
+}
+
 MYEXPORT gboolean 
 gstreamer_test_pipeline (gchar *pipeline)
 {
