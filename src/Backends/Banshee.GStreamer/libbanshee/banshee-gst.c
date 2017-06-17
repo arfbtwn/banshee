@@ -70,7 +70,7 @@ gstreamer_deinitialize ()
         return;
     }
 
-    bp_debug ("Deinitializing GStreamer");
+    banshee_log_debug ("gst", "Deinitializing GStreamer");
     gst_deinit();
 
     gstreamer_initialized = FALSE;
