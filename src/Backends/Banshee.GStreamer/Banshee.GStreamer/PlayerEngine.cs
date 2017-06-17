@@ -209,7 +209,6 @@ namespace Banshee.GStreamer
 
         public override void Dispose ()
         {
-            bp_stop (handle, true);
             UninstallPreferences ();
             base.Dispose ();
             bp_destroy (handle);
