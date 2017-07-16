@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="wav">
-      <_name>Waveform PCM</_name>
-      <_description>WAV+PCM is a lossless format that holds uncompressed, raw pulse-code modulated (PCM) audio.</_description>
+      <name>Waveform PCM</name>
+      <description>WAV+PCM is a lossless format that holds uncompressed, raw pulse-code modulated (PCM) audio.</description>
       <output-file-extension>wav</output-file-extension>
       <mimetype>audio/x-wav</mimetype>
       <mimetype>audio/wav</mimetype>

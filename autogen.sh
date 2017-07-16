@@ -70,14 +70,14 @@ check_autotool_version aclocal 1.9
 check_autotool_version automake 1.10
 check_autotool_version autoconf 2.53
 check_autotool_version $LIBTOOLIZE 1.4.3
-check_autotool_version intltoolize 0.35.0
+check_autotool_version autopoint 0.19.8
 check_autotool_version pkg-config 0.14.0
 
 if git --help &>/dev/null; then
 	git submodule update --init
 fi
 
-run intltoolize --force --copy
+run autopoint --force
 run $LIBTOOLIZE --force --copy --automake
 run aclocal -I build/m4/banshee -I build/m4/banshee/backends -I build/m4/banshee/clients -I build/m4/banshee/dap -I build/m4/banshee/extensions -I build/m4/shamrock -I build/m4/shave $ACLOCAL_FLAGS
 run autoconf

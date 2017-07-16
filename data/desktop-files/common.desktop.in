@@ -1,9 +1,9 @@
 Version=1.0
 @BANSHEE_DESKTOP_NAME@
-_GenericName=Media Player
-_X-GNOME-FullName=Banshee Media Player
-_Comment=Play and organize your media collection
-_Keywords=Video;Movie;Film;Clip;Flick;Series;Media;Player;DVD;Disc;Mp3;Audio;CD;MTP;Podcast;DAAP;Playlist;Ipod;Multimedia;Collection;Music;Radio;
+GenericName=Media Player
+X-GNOME-FullName=Banshee Media Player
+Comment=Play and organize your media collection
+Keywords=Video;Movie;Film;Clip;Flick;Series;Media;Player;DVD;Disc;Mp3;Audio;CD;MTP;Podcast;DAAP;Playlist;Ipod;Multimedia;Collection;Music;Radio;
 Icon=media-player-banshee
 StartupNotify=true
 Terminal=false

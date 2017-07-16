@@ -1,9 +1,9 @@
 [Desktop Entry]
-_Name=Banshee Media Panel
-_GenericName=Banshee Media Panel
-_X-GNOME-FullName=Banshee Media Panel
-_Comment=Play and browse your media collection
-_Keywords=Video;Movie;Film;Clip;Flick;Series;Media;Player;DVD;Disc;Mp3;Audio;CD;MTP;Podcast;DAAP;Playlist;Ipod;Multimedia;Collection;Music;Radio;
+Name=Banshee Media Panel
+GenericName=Banshee Media Panel
+X-GNOME-FullName=Banshee Media Panel
+Comment=Play and browse your media collection
+Keywords=Video;Movie;Film;Clip;Flick;Series;Media;Player;DVD;Disc;Mp3;Audio;CD;MTP;Podcast;DAAP;Playlist;Ipod;Multimedia;Collection;Music;Radio;
 Exec=banshee --redirect-log --client=MediaPanel
 Icon=media-player-banshee
 StartupNotify=true

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2013 Banshee Contributors <banshee-list@gnome.org> -->
-<application>
+<component>
   <id type="desktop">banshee.desktop</id>
   <licence>CC0</licence><!-- licence of this file, not the program -->
   <description>
     <!-- Writing GNOME below, instead of just "Linux", is inclusive of *BSD OSs -->
-    <_p>
+    <p>
       Banshee is an open source multimedia management and playback application
       for GNOME, Mac and Windows.
-    </_p>
+    </p>
 
-    <_p>
+    <p>
       Play your music and videos. Stay entertained and up to date with podcasts
       and video podcasts.  Sync your Android, iPod, and other devices. We think
       you'll love Banshee!
-    </_p>
+    </p>
   </description>
   <screenshots>
     <screenshot type="default" width="450" height="335">http://banshee.fm/images/slides/scaled/music-450.png</screenshot>
@@ -23,4 +23,4 @@
   <url type="homepage">http://banshee.fm/</url>
   <updatecontact>banshee-list_at_gnome.org</updatecontact>
   <project_group>GNOME</project_group>
-</application>
+</component>
