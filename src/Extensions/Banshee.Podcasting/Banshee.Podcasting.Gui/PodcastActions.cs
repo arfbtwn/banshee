@@ -493,6 +493,7 @@ namespace Banshee.Podcasting.Gui
             foreach (Feed feed in ActiveFeedModel.SelectedItems) {
                 if (feed != null) {
                     foreach (FeedItem item in feed.Items) {
+                        Hyena.Log.DebugFormat ("DownloadAll: {0}", item.Enclosure.Url);
                         item.Enclosure.AsyncDownload ();
                     }
                 }
@@ -608,6 +609,7 @@ namespace Banshee.Podcasting.Gui
         private void OnPodcastItemDownload (object sender, EventArgs e)
         {
             foreach (PodcastTrackInfo pi in PodcastTrackInfo.From (GetSelectedItems ())) {
+                Hyena.Log.DebugFormat ("ItemDownload: {0}", pi.Enclosure.Url);
                 pi.Enclosure.AsyncDownload ();
             }
         }
