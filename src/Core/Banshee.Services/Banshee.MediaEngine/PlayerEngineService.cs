@@ -304,7 +304,7 @@ namespace Banshee.MediaEngine
             
             if (!found) {
                 // Not in the library, get info from the file
-                TrackInfo track = new TrackInfo ();
+                TrackInfo track = new TrackInfo { Uri = uri };
                 using (var file = StreamTagger.ProcessUri (uri)) {
                     StreamTagger.TrackInfoMerge (track, file, false);
                 }
