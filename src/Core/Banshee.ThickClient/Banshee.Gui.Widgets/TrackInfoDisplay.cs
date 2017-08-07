@@ -124,6 +124,7 @@ namespace Banshee.Gui.Widgets
 
         protected TrackInfoDisplay (IntPtr native) : base (native)
         {
+            idle = true;
         }
 
         public TrackInfoDisplay ()
@@ -135,6 +136,8 @@ namespace Banshee.Gui.Widgets
             if (ServiceManager.Contains<ArtworkManager> ()) {
                 artwork_manager = ServiceManager.Get<ArtworkManager> ();
             }
+
+            idle = true;
 
             Connected = true;
             HasWindow = false;
@@ -150,7 +153,8 @@ namespace Banshee.Gui.Widgets
                 if (ServiceManager.PlayerEngine != null) {
                     connected = value;
                     if (value) {
-                        idle = ServiceManager.PlayerEngine.CurrentState == PlayerState.Idle;
+                        var current = ServiceManager.PlayerEngine.CurrentState;
+                        idle = current == PlayerState.Idle || current == PlayerState.NotReady || current == PlayerState.Ready;
                         ServiceManager.PlayerEngine.ConnectEvent (OnPlayerEvent,
                             PlayerEvent.StartOfStream |
                             PlayerEvent.TrackInfoUpdated |
@@ -158,6 +162,8 @@ namespace Banshee.Gui.Widgets
                     } else {
                         ServiceManager.PlayerEngine.DisconnectEvent (OnPlayerEvent);
                     }
+                } else {
+                    idle = true;
                 }
             }
         }
