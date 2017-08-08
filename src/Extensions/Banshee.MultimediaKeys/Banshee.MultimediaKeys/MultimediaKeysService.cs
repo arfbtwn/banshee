@@ -148,10 +148,8 @@ namespace Banshee.MultimediaKeys
 
             switch (key) {
                 case "Play":
-                    ServiceManager.PlayerEngine.TogglePlaying ();
-                    break;
                 case "Pause":
-                    ServiceManager.PlayerEngine.Pause ();
+                    ServiceManager.PlayerEngine.TogglePlaying ();
                     break;
                 case "Next":
                     ServiceManager.PlaybackController.Next ();
