@@ -36,6 +36,7 @@ using Hyena.Gui;
 using Hyena.Gui.Theming;
 using Hyena.Gui.Theatrics;
 
+using Banshee.Gui;
 using Banshee.ServiceStack;
 
 namespace Banshee.Sources.Gui
@@ -124,21 +125,28 @@ namespace Banshee.Sources.Gui
             }
         }
 
-        protected override void OnGetPreferredWidth (Widget widget, out int minimum_width, out int natural_width)
+        protected unsafe override void OnGetPreferredWidth (Widget widget, out int minimum_size, out int natural_size)
         {
-            base.OnGetPreferredWidth (widget, out minimum_width, out natural_width);
-            if (!(widget is TreeView)) {
-                minimum_width = natural_width = 200;
+            base.OnGetPreferredWidth (widget, out minimum_size, out natural_size);
+
+            fixed (int* m = &minimum_size)
+            fixed (int* n = &natural_size)
+            {
+                Safe.Assign (m, 200);
+                Safe.Assign (n, 200);
             }
         }
 
-        protected override void OnGetPreferredHeight (Widget widget, out int minimum_height, out int natural_height)
+        protected unsafe override void OnGetPreferredHeight (Widget widget, out int minimum_size, out int natural_size)
         {
-            int minimum_text_h, natural_text_h;
-            base.GetPreferredHeight (widget, out minimum_text_h, out natural_text_h);
+            base.OnGetPreferredHeight (widget, out minimum_size, out natural_size);
 
-            minimum_height = (int)Math.Max (RowHeight, minimum_text_h);
-            natural_height = (int)Math.Max (RowHeight, natural_text_h);
+            fixed (int* m = &minimum_size)
+            fixed (int* n = &natural_size)
+            {
+                Safe.Assign (m, Math.Max (RowHeight, Safe.Default (m)));
+                Safe.Assign (n, Math.Max (RowHeight, Safe.Default (n)));
+            }
         }
 
         private int expander_right_x;

@@ -131,6 +131,7 @@ SOURCES =  \
 	Banshee.Gui/PlaybackRepeatActions.cs \
 	Banshee.Gui/PlaybackShuffleActions.cs \
 	Banshee.Gui/PlaybackSubtitleActions.cs \
+	Banshee.Gui/Safe.cs \
 	Banshee.Gui/SourceActions.cs \
 	Banshee.Gui/TrackActions.cs \
 	Banshee.Gui/ViewActions.cs \
