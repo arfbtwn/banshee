@@ -14,9 +14,11 @@ addons:
       - libmono-zeroconf1.0-cil
       - libgconf2.0-cil
       - libboo2.0.9-cil
+      - libmono-upnp-cil
 env:
   - BUILD_CONFIGURATION=Release
   - BUILD_CONFIGURATION=Debug
 
 script:
+  - msbuild /t:restore
   - msbuild /p:Configuration=$BUILD_CONFIGURATION Banshee.sln
