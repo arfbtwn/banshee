@@ -20,19 +20,13 @@
  * THE SOFTWARE.
  */
 
-#if INTERNAL_NOTIFY_SHARP
-
 using System;
 using System.Reflection;
 using System.Collections.Generic;
 
-using GLib;
 using Gdk;
 using Gtk;
-
 using DBus;
-using org.freedesktop;
-using org.freedesktop.DBus;
 
 using EventHandler = System.EventHandler;
 using EventArgs = System.EventArgs;
@@ -92,16 +86,16 @@ namespace Notifications {
 
 		private INotifications nf;
 
-		private bool updates_pending = false;
-		private bool shown = false;
+		private bool updates_pending;
+		private bool shown;
 
 		private string app_name;
-		private uint id = 0;
+		private uint id;
 		private int timeout = -1;
 		private string summary = String.Empty, body = String.Empty;
 		private string icon = String.Empty;
-		private Gtk.Widget attach_widget = null;
-		private Gtk.StatusIcon status_icon = null;
+		private Widget attach_widget;
+		private StatusIcon status_icon;
 		private IDictionary <string, ActionTuple> action_map = new Dictionary<string, ActionTuple> ();
 		private IDictionary <string, object> hints  = new Dictionary<string, object> ();
 
@@ -123,7 +117,7 @@ namespace Notifications {
 				app_asm = Assembly.GetCallingAssembly ();
 			}
 
-			this.app_name = app_asm.GetName ().Name;
+			app_name = app_asm.GetName ().Name;
 		}
 
 		public Notification (string summary, string body) : this () {
@@ -139,19 +133,19 @@ namespace Notifications {
 			SetPixbufHint (icon);
 		}
 
-		public Notification (string summary, string body, Pixbuf icon, Gtk.Widget widget) : this (summary, body, icon) {
+		public Notification (string summary, string body, Pixbuf icon, Widget widget) : this (summary, body, icon) {
 			AttachToWidget (widget);
 		}
 		
-		public Notification (string summary, string body, string icon, Gtk.Widget widget) : this (summary, body, icon) {
+		public Notification (string summary, string body, string icon, Widget widget) : this (summary, body, icon) {
 			AttachToWidget (widget);
 		}
 
-		public Notification (string summary, string body, Pixbuf icon, Gtk.StatusIcon status_icon) : this (summary, body, icon) {
+		public Notification (string summary, string body, Pixbuf icon, StatusIcon status_icon) : this (summary, body, icon) {
 			AttachToStatusIcon (status_icon);
 		}
 		
-		public Notification (string summary, string body, string icon, Gtk.StatusIcon status_icon) : this (summary, body, icon) {
+		public Notification (string summary, string body, string icon, StatusIcon status_icon) : this (summary, body, icon) {
 			AttachToStatusIcon (status_icon);
 		}
 
@@ -229,7 +223,7 @@ namespace Notifications {
 			}
 		}
 
-		public Gtk.Widget AttachWidget {
+		public Widget AttachWidget {
 			get {
 				return attach_widget;
 			}
@@ -238,7 +232,7 @@ namespace Notifications {
 			}
 		}
 
-		public Gtk.StatusIcon StatusIcon {
+		public StatusIcon StatusIcon {
 			get {
 				return status_icon;
 			}
@@ -264,9 +258,9 @@ namespace Notifications {
 			hints["icon_data"] = icon_data;
 		}
 
-		public void AttachToWidget (Gtk.Widget widget) {
+		public void AttachToWidget (Widget widget) {
             if (widget == null) {
-                throw new ArgumentNullException ("widget");
+                throw new ArgumentNullException (nameof(widget));
             }
 
 			int x, y;
@@ -286,9 +280,9 @@ namespace Notifications {
 			status_icon = null;
 		}
 
-		public void AttachToStatusIcon (Gtk.StatusIcon status_icon) {
-			Gdk.Screen screen;
-			Gdk.Rectangle rect;
+		public void AttachToStatusIcon (StatusIcon status_icon) {
+			Screen screen;
+			Rectangle rect;
 			Orientation orientation;
 			int x, y;
 
@@ -356,8 +350,8 @@ namespace Notifications {
 		}
 
 		public void AddAction (string action, string label, ActionHandler handler) {
-			if (Notifications.Global.Capabilities != null &&
-			    Array.IndexOf (Notifications.Global.Capabilities, "actions") > -1) {
+			if (Global.Capabilities != null &&
+			    Array.IndexOf (Global.Capabilities, "actions") > -1) {
 				lock (action_map) {
 					action_map[action] = new ActionTuple (label, handler);
 				}
@@ -397,5 +391,3 @@ namespace Notifications {
 		}
 	}
 }
-
-#endif

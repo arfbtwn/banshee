@@ -20,13 +20,9 @@
  * THE SOFTWARE.
  */
 
-#if INTERNAL_NOTIFY_SHARP
-
-using System;
 using System.Collections.Generic;
 
 using DBus;
-using org.freedesktop;
 using org.freedesktop.DBus;
 
 namespace Notifications {
@@ -62,7 +58,7 @@ namespace Notifications {
 		private const string interface_name = "org.freedesktop.Notifications";
 		private const string object_path = "/org/freedesktop/Notifications";
 
-		private static INotifications dbus_object = null;
+		private static INotifications dbus_object;
 		private static object dbus_object_lock = new object ();
 
 		internal static INotifications DBusObject {
@@ -94,5 +90,3 @@ namespace Notifications {
 		}
 	}
 }
-
-#endif

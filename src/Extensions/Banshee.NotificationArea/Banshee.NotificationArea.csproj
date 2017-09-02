@@ -21,7 +21,6 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\bin</OutputPath>
-    <DefineConstants>INTERNAL_NOTIFY_SHARP</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -44,20 +43,9 @@
       <Project>{A3701765-E571-413D-808C-9788A22791AF}</Project>
       <Name>Banshee.Widgets</Name>
     </ProjectReference>
-    <Reference Include="atk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-3.0</Package>
-    </Reference>
     <Reference Include="cairo-sharp, Version=1.10.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <HintPath>..\..\..\bin\cairo-sharp.dll</HintPath>
       <Package>gtk-sharp-3.0</Package>
-    </Reference>
-    <Reference Include="dbus-sharp">
-      <HintPath>..\..\..\bin\dbus-sharp.dll</HintPath>
-      <Package>dbus-sharp-2.0</Package>
-    </Reference>
-    <Reference Include="dbus-sharp-glib">
-      <HintPath>..\..\..\bin\dbus-sharp-glib.dll</HintPath>
-      <Package>dbus-sharp-glib-2.0</Package>
     </Reference>
     <ProjectReference Include="..\..\Hyena\Hyena.Gui\Hyena.Gui.csproj">
       <Project>{C856EFD8-E812-4E61-8B76-E3583D94C233}</Project>
@@ -72,10 +60,10 @@
       <Project>{95374549-9553-4C1E-9D89-667755F90E12}</Project>
       <Name>Hyena</Name>
     </ProjectReference>
-    <Reference Include="gio-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gio-sharp-3.0</Package>
-    </Reference>
-    <Reference Include="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
+    <ProjectReference Include="..\..\Libraries\Notifications\Notifications.csproj">
+      <Project>{a9468999-d9f1-4ca3-8ceb-71e520bed921}</Project>
+      <Name>Notifications</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -97,8 +85,6 @@
     <Compile Include="Banshee.NotificationArea\INotificationAreaBox.cs" />
     <Compile Include="Banshee.NotificationArea\GtkNotificationAreaBox.cs" />
     <Compile Include="Banshee.NotificationArea\TrackInfoPopup.cs" />
-    <Compile Include="Notifications\Notification.cs" />
-    <Compile Include="Notifications\Notifications.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\NotificationAreaMenu.xml">
