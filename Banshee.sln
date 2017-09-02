@@ -156,6 +156,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migo", "src\Libraries\Migo\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics", "extras\metrics\metrics.csproj", "{6D17167C-AC3F-4D40-A652-46627276A9A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications", "src\Libraries\Notifications\Notifications.csproj", "{A9468999-D9F1-4CA3-8CEB-71E520BED921}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -408,6 +410,10 @@ Global
 		{FDB90084-A1E6-4497-8047-52800A4AAB28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDB90084-A1E6-4497-8047-52800A4AAB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDB90084-A1E6-4497-8047-52800A4AAB28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9468999-D9F1-4CA3-8CEB-71E520BED921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9468999-D9F1-4CA3-8CEB-71E520BED921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9468999-D9F1-4CA3-8CEB-71E520BED921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9468999-D9F1-4CA3-8CEB-71E520BED921}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EB1FDF3F-048C-4010-80F5-D936A312580F} = {E6AD3714-5EA3-49D9-BA8D-12C69B2B8067}
@@ -483,6 +489,7 @@ Global
 		{A7566CDC-6033-4A16-9E9D-87D05A627066} = {4F47D6F1-4047-4A89-AE85-3AE5EF9F2961}
 		{C5DD02DE-4F0E-4DC0-ABC7-035A8217CD50} = {4F47D6F1-4047-4A89-AE85-3AE5EF9F2961}
 		{9C7B8E9C-A4E6-4459-A2C4-3D2D199EA919} = {4F47D6F1-4047-4A89-AE85-3AE5EF9F2961}
+		{A9468999-D9F1-4CA3-8CEB-71E520BED921} = {4F47D6F1-4047-4A89-AE85-3AE5EF9F2961}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
