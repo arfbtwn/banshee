@@ -49,9 +49,6 @@
       <HintPath>..\..\..\..\..\..\..\usr\lib\mono\gac\gtk-sharp\3.0.0.0__35e10195dab3c99f\gtk-sharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Notifications\Notification.cs" />
