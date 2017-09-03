@@ -193,7 +193,7 @@ namespace Banshee.MediaEngine
 
         private void WaitFor (PlayerState state)
         {
-            WaitFor (null, state);
+            WaitFor ((System.Action)null, state);
         }
 
         private void WaitFor (System.Action action, PlayerState state)
