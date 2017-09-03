@@ -14,9 +14,7 @@ SOURCES =  \
 	Banshee.NotificationArea/GtkNotificationAreaBox.cs \
 	Banshee.NotificationArea/INotificationAreaBox.cs \
 	Banshee.NotificationArea/NotificationAreaService.cs \
-	Banshee.NotificationArea/TrackInfoPopup.cs \
-	Notifications/Notification.cs \
-	Notifications/Notifications.cs
+	Banshee.NotificationArea/TrackInfoPopup.cs
 
 RESOURCES =  \
 	Banshee.NotificationArea.addin.xml \

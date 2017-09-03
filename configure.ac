@@ -270,6 +270,7 @@ src/Libraries/Mono.Media/Makefile
 src/Libraries/Mtp/Makefile
 src/Libraries/Mtp/Mtp.dll.config
 src/Libraries/MusicBrainz/Makefile
+src/Libraries/Notifications/Makefile
 
 src/Dap/Makefile
 src/Dap/Banshee.Dap/Makefile

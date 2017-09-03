@@ -3,6 +3,7 @@ SUBDIRS = \
    Mono.Media \
    Mtp \
    MusicBrainz \
+   Notifications \
    Lastfm \
    Lastfm.Gui
 
