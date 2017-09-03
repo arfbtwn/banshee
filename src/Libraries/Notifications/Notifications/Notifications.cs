@@ -25,68 +25,68 @@ using System.Collections.Generic;
 using DBus;
 using org.freedesktop.DBus;
 
-namespace Notifications {
-	[Interface ("org.freedesktop.Notifications")]
-	internal interface INotifications : Introspectable, Properties {
-		ServerInformation GetServerInformation ();
-		string[] GetCapabilities ();
-		void CloseNotification (uint id);
-		uint Notify (string app_name, uint id, string icon, string summary, string body,
-			string[] actions, IDictionary<string, object> hints, int timeout);
-		event NotificationClosedHandler NotificationClosed;
-		event ActionInvokedHandler ActionInvoked;
-	}
+namespace Notifications
+{
+    [Interface ("org.freedesktop.Notifications")]
+    internal interface INotifications : Introspectable, Properties
+    {
+        ServerInformation GetServerInformation ();
+        string[] GetCapabilities ();
+        void CloseNotification (uint id);
 
-	public enum CloseReason : uint {
-		Expired = 1,
-		User = 2,
-		API = 3,
-		Reserved = 4
-	}
+        uint Notify (string app_name, uint id, string icon, string summary, string body,
+            string[] actions, IDictionary<string, object> hints, int timeout);
 
-	internal delegate void NotificationClosedHandler (uint id, uint reason);
-	internal delegate void ActionInvokedHandler (uint id, string action);
+        event NotificationClosedHandler NotificationClosed;
+        event ActionInvokedHandler ActionInvoked;
+    }
 
-	public struct ServerInformation {
-		public string Name;
-		public string Vendor;
-		public string Version;
-		public string SpecVersion;
-	}
+    public enum CloseReason : uint
+    {
+        Expired = 1,
+        User = 2,
+        API = 3,
+        Reserved = 4
+    }
 
-	public static class Global {
-		private const string interface_name = "org.freedesktop.Notifications";
-		private const string object_path = "/org/freedesktop/Notifications";
+    internal delegate void NotificationClosedHandler (uint id, uint reason);
 
-		private static INotifications dbus_object;
-		private static object dbus_object_lock = new object ();
+    internal delegate void ActionInvokedHandler (uint id, string action);
 
-		internal static INotifications DBusObject {
-			get {
-				if (dbus_object != null)
-					return dbus_object;
+    public struct ServerInformation
+    {
+        public string Name;
+        public string Vendor;
+        public string Version;
+        public string SpecVersion;
+    }
 
-				lock (dbus_object_lock) {
-					if (! Bus.Session.NameHasOwner (interface_name))
-						Bus.Session.StartServiceByName (interface_name);
+    public static class Global
+    {
+        private const string InterfaceName = "org.freedesktop.Notifications";
+        private const string ObjectPath = "/org/freedesktop/Notifications";
 
-					dbus_object = Bus.Session.GetObject<INotifications>
-						(interface_name, new ObjectPath (object_path));
-					return dbus_object;
-				}
-			}
-		}
+        private static INotifications dbus_object;
+        private static readonly object DbusObjectLock = new object ();
 
-		public static string[] Capabilities {
-			get {
-				return DBusObject.GetCapabilities ();
-			}
-		}
-		
-		public static ServerInformation ServerInformation {
-			get {
-				return DBusObject.GetServerInformation ();
-			}
-		}
-	}
+        internal static INotifications DBusObject {
+            get {
+                if (dbus_object != null)
+                    return dbus_object;
+
+                lock (DbusObjectLock) {
+                    if (!Bus.Session.NameHasOwner (InterfaceName))
+                        Bus.Session.StartServiceByName (InterfaceName);
+
+                    dbus_object = Bus.Session.GetObject<INotifications>
+                        (InterfaceName, new ObjectPath (ObjectPath));
+                    return dbus_object;
+                }
+            }
+        }
+
+        public static string[] Capabilities => DBusObject.GetCapabilities ();
+
+        public static ServerInformation ServerInformation => DBusObject.GetServerInformation ();
+    }
 }
