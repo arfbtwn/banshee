@@ -27,7 +27,8 @@ using org.freedesktop.DBus;
 
 namespace Notifications {
 	[Interface ("org.freedesktop.Notifications")]
-	internal interface INotifications : Introspectable, Properties {
+	internal interface INotifications : Introspectable, Properties
+	{
 		ServerInformation GetServerInformation ();
 		string[] GetCapabilities ();
 		void CloseNotification (uint id);
@@ -37,7 +38,8 @@ namespace Notifications {
 		event ActionInvokedHandler ActionInvoked;
 	}
 
-	public enum CloseReason : uint {
+	public enum CloseReason : uint
+	{
 		Expired = 1,
 		User = 2,
 		API = 3,
@@ -47,14 +49,16 @@ namespace Notifications {
 	internal delegate void NotificationClosedHandler (uint id, uint reason);
 	internal delegate void ActionInvokedHandler (uint id, string action);
 
-	public struct ServerInformation {
+	public struct ServerInformation
+	{
 		public string Name;
 		public string Vendor;
 		public string Version;
 		public string SpecVersion;
 	}
 
-	public static class Global {
+	public static class Global
+	{
 		private const string interface_name = "org.freedesktop.Notifications";
 		private const string object_path = "/org/freedesktop/Notifications";
 
@@ -77,16 +81,8 @@ namespace Notifications {
 			}
 		}
 
-		public static string[] Capabilities {
-			get {
-				return DBusObject.GetCapabilities ();
-			}
-		}
-		
-		public static ServerInformation ServerInformation {
-			get {
-				return DBusObject.GetServerInformation ();
-			}
-		}
+		public static string[] Capabilities => DBusObject.GetCapabilities ();
+
+		public static ServerInformation ServerInformation => DBusObject.GetServerInformation ();
 	}
 }

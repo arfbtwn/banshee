@@ -32,39 +32,40 @@ using EventHandler = System.EventHandler;
 using EventArgs = System.EventArgs;
 
 namespace Notifications {
-	public enum Urgency : byte {
+	public enum Urgency : byte
+	{
 		Low = 0,
 		Normal,
 		Critical
 	}
 
-	public class ActionArgs : EventArgs {
-		private string action;
-		public string Action {
-			get { return action; }
-		}
+	public class ActionArgs : EventArgs
+	{
+		public string Action { get; }
 
-		public ActionArgs (string action) {
-			this.action = action;
+		public ActionArgs (string action)
+		{
+			Action = action;
 		}
 	}
 
-	public class CloseArgs : EventArgs {
-		private CloseReason reason;
-		public CloseReason Reason {
-			get { return reason; }
-		}
+	public class CloseArgs : EventArgs
+	{
+		public CloseReason Reason { get; }
 
-		public CloseArgs (CloseReason reason) {
-			this.reason = reason;
+		public CloseArgs (CloseReason reason)
+		{
+			Reason = reason;
 		}
 	}
 
 	public delegate void ActionHandler (object o, ActionArgs args);
 	public delegate void CloseHandler (object o, CloseArgs args);
 	
-	public class Notification {
-		private struct IconData {
+	public class Notification
+	{
+		private struct IconData
+		{
 			public int Width;
 			public int Height;
 			public int Rowstride;
@@ -74,11 +75,13 @@ namespace Notifications {
 			public byte[] Pixels;
 		}
 
-		private struct ActionTuple {
+		private struct ActionTuple
+		{
 			public string Label;
 			public ActionHandler Handler;
 
-			public ActionTuple (string label, ActionHandler handler) {
+			public ActionTuple (string label, ActionHandler handler)
+			{
 				Label = label;
 				Handler = handler;
 			}
@@ -90,7 +93,6 @@ namespace Notifications {
 		private bool shown;
 
 		private string app_name;
-		private uint id;
 		private int timeout = -1;
 		private string summary = String.Empty, body = String.Empty;
 		private string icon = String.Empty;
@@ -101,51 +103,56 @@ namespace Notifications {
 
 		public event EventHandler Closed;
 
-		static Notification () {
+		static Notification ()
+		{
 			BusG.Init ();
 		}
 		
-		public Notification () {
+		public Notification ()
+		{
 			nf = Global.DBusObject;
 
 			nf.NotificationClosed += OnClosed;
 			nf.ActionInvoked += OnActionInvoked;
 
-			Assembly app_asm = Assembly.GetEntryAssembly ();
-
-			if (app_asm == null) {
-				app_asm = Assembly.GetCallingAssembly ();
-			}
+			Assembly app_asm = Assembly.GetEntryAssembly () ?? Assembly.GetCallingAssembly ();
 
 			app_name = app_asm.GetName ().Name;
 		}
 
-		public Notification (string summary, string body) : this () {
+		public Notification (string summary, string body) : this ()
+		{
 			this.summary = summary;
 			this.body = body;
 		}
 
-		public Notification (string summary, string body, string icon) : this (summary, body) {
+		public Notification (string summary, string body, string icon) : this (summary, body)
+		{
 			this.icon = icon;
 		}
 
-		public Notification (string summary, string body, Pixbuf icon) : this (summary, body) {
+		public Notification (string summary, string body, Pixbuf icon) : this (summary, body)
+		{
 			SetPixbufHint (icon);
 		}
 
-		public Notification (string summary, string body, Pixbuf icon, Widget widget) : this (summary, body, icon) {
+		public Notification (string summary, string body, Pixbuf icon, Widget widget) : this (summary, body, icon)
+		{
 			AttachToWidget (widget);
 		}
 		
-		public Notification (string summary, string body, string icon, Widget widget) : this (summary, body, icon) {
+		public Notification (string summary, string body, string icon, Widget widget) : this (summary, body, icon)
+		{
 			AttachToWidget (widget);
 		}
 
-		public Notification (string summary, string body, Pixbuf icon, StatusIcon status_icon) : this (summary, body, icon) {
+		public Notification (string summary, string body, Pixbuf icon, StatusIcon status_icon) : this (summary, body, icon)
+		{
 			AttachToStatusIcon (status_icon);
 		}
 		
-		public Notification (string summary, string body, string icon, StatusIcon status_icon) : this (summary, body, icon) {
+		public Notification (string summary, string body, string icon, StatusIcon status_icon) : this (summary, body, icon)
+		{
 			AttachToStatusIcon (status_icon);
 		}
 
@@ -155,9 +162,7 @@ namespace Notifications {
 				summary = value;
 				Update ();
 			}
-			get {
-				return summary;
-			}
+			get => summary;
 		}
 
 		public string Body {
@@ -165,9 +170,7 @@ namespace Notifications {
 				body = value;
 				Update ();
 			}
-			get {
-				return body;
-			}
+			get => body;
 		}
 
 		public int Timeout {
@@ -175,9 +178,7 @@ namespace Notifications {
 				timeout = value;
 				Update ();
 			}
-			get {
-				return timeout;
-			}
+			get => timeout;
 		}
 
 		public Urgency Urgency {
@@ -185,9 +186,7 @@ namespace Notifications {
 				hints["urgency"] = (byte) value;
 				Update ();
 			}
-			get {
-				return hints.ContainsKey ("urgency") ? (Urgency) hints["urgency"] : Urgency.Normal;
-			}
+			get => hints.ContainsKey ("urgency") ? (Urgency) hints["urgency"] : Urgency.Normal;
 		}
 
 		public string Category {
@@ -195,16 +194,13 @@ namespace Notifications {
 				hints["category"] = value;
 				Update ();
 			}
-			get {
-				return hints.ContainsKey ("category") ? (string) hints["category"] : String.Empty;
-			}
-
+			get => hints.ContainsKey ("category") ? (string) hints["category"] : string.Empty;
 		}
 
 		public Pixbuf Icon {
 			set {
 				SetPixbufHint (value);
-				icon = String.Empty;
+				icon = string.Empty;
 				Update ();
 			}
 		}
@@ -217,38 +213,29 @@ namespace Notifications {
 			}
 		}
 
-		public uint Id {
-			get {
-				return id;
-			}
-		}
+		public uint Id { get; private set; }
 
 		public Widget AttachWidget {
-			get {
-				return attach_widget;
-			}
-			set {
-				AttachToWidget (value);
-			}
+			get => attach_widget;
+			set => AttachToWidget (value);
 		}
 
 		public StatusIcon StatusIcon {
-			get {
-				return status_icon;
-			}
-			set {
-				AttachToStatusIcon (value);
-			}
+			get => status_icon;
+			set => AttachToStatusIcon (value);
 		}
 
-		private void SetPixbufHint (Pixbuf pixbuf) {
-			IconData icon_data = new IconData ();
-			icon_data.Width = pixbuf.Width;
-			icon_data.Height = pixbuf.Height;
-			icon_data.Rowstride = pixbuf.Rowstride;
-			icon_data.HasAlpha = pixbuf.HasAlpha;
-			icon_data.BitsPerSample = pixbuf.BitsPerSample;
-			icon_data.NChannels = pixbuf.NChannels;
+		private void SetPixbufHint (Pixbuf pixbuf)
+		{
+			IconData icon_data = new IconData
+			{
+				Width = pixbuf.Width,
+				Height = pixbuf.Height,
+				Rowstride = pixbuf.Rowstride,
+				HasAlpha = pixbuf.HasAlpha,
+				BitsPerSample = pixbuf.BitsPerSample,
+				NChannels = pixbuf.NChannels
+			};
 
 			int len = (icon_data.Height - 1) * icon_data.Rowstride + icon_data.Width *
 				((icon_data.NChannels * icon_data.BitsPerSample + 7) / 8);
@@ -258,7 +245,8 @@ namespace Notifications {
 			hints["icon_data"] = icon_data;
 		}
 
-		public void AttachToWidget (Widget widget) {
+		public void AttachToWidget (Widget widget)
+		{
             if (widget == null) {
                 throw new ArgumentNullException (nameof(widget));
             }
@@ -280,7 +268,8 @@ namespace Notifications {
 			status_icon = null;
 		}
 
-		public void AttachToStatusIcon (StatusIcon status_icon) {
+		public void AttachToStatusIcon (StatusIcon status_icon)
+		{
 			Screen screen;
 			Rectangle rect;
 			Orientation orientation;
@@ -299,14 +288,16 @@ namespace Notifications {
 			attach_widget = null;
 		}
 
-		public void SetGeometryHints (Screen screen, int x, int y) {
+		public void SetGeometryHints (Screen screen, int x, int y)
+		{
 			hints["x"] = x;
 			hints["y"] = y;
 			hints["xdisplay"] = screen.MakeDisplayName ();
 			Update ();
 		}
 
-		private void Update () {
+		private void Update ()
+		{
 			if (shown && !updates_pending) {
 				updates_pending = true;
 				GLib.Timeout.Add (100, delegate {
@@ -319,7 +310,8 @@ namespace Notifications {
 			}
 		}
 		
-		public void Show () {
+		public void Show ()
+		{
 			string[] actions;
 			lock (action_map) {
 				actions = new string[action_map.Keys.Count * 2];
@@ -329,27 +321,28 @@ namespace Notifications {
 					actions[i++] = pair.Value.Label;
 				}
 			}
-			id = nf.Notify (app_name, id, icon, summary, body, actions, hints, timeout);
+			Id = nf.Notify (app_name, Id, icon, summary, body, actions, hints, timeout);
 			shown = true;
 		}
 
-		public void Close () {
-			nf.CloseNotification (id);
-			id = 0;
+		public void Close ()
+		{
+			nf.CloseNotification (Id);
+			Id = 0;
 			shown = false;
 		}
 
-		private void OnClosed (uint id, uint reason) {
-			if (this.id == id) {
-				this.id = 0;
+		private void OnClosed (uint id, uint reason)
+		{
+			if (Id == id) {
+				Id = 0;
 				shown = false;
-				if (Closed != null) {
-					Closed (this, new CloseArgs ((CloseReason) reason));
-				}
+				Closed?.Invoke (this, new CloseArgs ((CloseReason) reason));
 			}
 		}
 
-		public void AddAction (string action, string label, ActionHandler handler) {
+		public void AddAction (string action, string label, ActionHandler handler)
+		{
 			if (Global.Capabilities != null &&
 			    Array.IndexOf (Global.Capabilities, "actions") > -1) {
 				lock (action_map) {
@@ -359,33 +352,38 @@ namespace Notifications {
 			}
 		}
 
-		public void RemoveAction (string action) {
+		public void RemoveAction (string action)
+		{
 			lock (action_map) {
 				action_map.Remove (action);
 			}
 			Update ();
 		}
 
-		public void ClearActions () {
+		public void ClearActions ()
+		{
 			lock (action_map) {
 				action_map.Clear ();
 			}
 			Update ();
 		}
 
-		private void OnActionInvoked (uint id, string action) {
+		private void OnActionInvoked (uint id, string action)
+		{
 			lock (action_map) {
-				if (this.id == id && action_map.ContainsKey (action))
+				if (Id == id && action_map.ContainsKey (action))
 					action_map[action].Handler (this, new ActionArgs (action));
 			}
 		}
 
-		public void AddHint (string name, object value) {
+		public void AddHint (string name, object value)
+		{
 			hints[name] = value;
 			Update ();
 		}
 
-		public void RemoveHint (string name) {
+		public void RemoveHint (string name)
+		{
 			hints.Remove (name);
 			Update ();
 		}
