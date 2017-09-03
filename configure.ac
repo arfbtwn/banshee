@@ -347,7 +347,7 @@ ${PACKAGE}-${VERSION}
     MTP:                   ${enable_libmtp}
 
   Extra Features:
-    Web Browser:           ${have_libwebkit} (webkitgtk-3.0 >= $WEBKIT_MIN_VERSION, libsoup-2.4 >= $SOUP_MIN_VERSION)
+    Web Browser:           ${have_libwebkit} (webkit2gtk-4.0 >= $WEBKIT_MIN_VERSION, libsoup-2.4 >= $SOUP_MIN_VERSION)
     DAAP:                  ${enable_daap}
     GIO Backend:           ${enable_gio} (gio-sharp >= $GIOSHARP_REQUIRED)
     GIO Hardware:          ${enable_gio_hardware} (gudev-sharp >= $GUDEVSHARP_REQUIRED)

@@ -1,5 +1,5 @@
 #include <config.h>
-#include <webkit/webkit.h>
+#include <webkit2/webkit2.h>
 
 typedef struct OssiferSession OssiferSession;
 
