@@ -30,6 +30,7 @@ namespace Banshee.WebBrowser
 {
     public enum OssiferLoadStatus
     {
+        Unknown,
         Provisional,
         Committed,
         Finished,

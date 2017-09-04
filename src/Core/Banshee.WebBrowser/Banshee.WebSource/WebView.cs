@@ -143,8 +143,7 @@ namespace Banshee.WebSource
         {
             // This is an HTML5 Canvas/JS spinner icon. It is awesome
             // and renders immediately, going away when the store loads.
-            LoadString (AssemblyResource.GetFileContents ("loading.html"),
-                "text/html", "UTF-8", null);
+            LoadHtml (AssemblyResource.GetFileContents ("loading.html"), null);
 
             // Here we download and save for later injection some JavaScript
             // to fix-up the Amazon pages. We don't store this locally since

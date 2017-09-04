@@ -157,7 +157,7 @@ namespace Banshee.WebBrowser
                 // Translators: {0} is the URL of the web page that was requested
                 string details = String.Format (Catalog.GetString ("The security certificate for {0} is invalid."),
                                                 web_view.Uri);
-                web_view.LoadString (String.Format ("{0}<br>{1}", message, details), "text/html", "UTF-8", null);
+                web_view.LoadHtml ($"{message}<br>{details}", null);
             }
         }
     }

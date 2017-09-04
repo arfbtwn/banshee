@@ -142,6 +142,7 @@ namespace Banshee.WebBrowser
 
         private void HandleLoadStatusChanged (IntPtr ossifer, OssiferLoadStatus status)
         {
+            LoadStatus = status;
             OnLoadStatusChanged (status);
         }
 
@@ -183,26 +184,19 @@ namespace Banshee.WebBrowser
         }
 
         [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void ossifer_web_view_load_string (IntPtr ossifer,
-            IntPtr content, IntPtr mimetype, IntPtr encoding, IntPtr base_uri);
+        private static extern void ossifer_web_view_load_html (IntPtr ossifer, IntPtr content, IntPtr baseUri);
 
-        public void LoadString (string content, string mimetype, string encoding, string baseUri)
+        public void LoadHtml (string content, string baseUri)
         {
             var content_raw = IntPtr.Zero;
-            var mimetype_raw = IntPtr.Zero;
-            var encoding_raw = IntPtr.Zero;
             var base_uri_raw = IntPtr.Zero;
 
             try {
-                ossifer_web_view_load_string (Handle,
+                ossifer_web_view_load_html (Handle,
                     content_raw = GLib.Marshaller.StringToPtrGStrdup (content),
-                    mimetype_raw = GLib.Marshaller.StringToPtrGStrdup (mimetype),
-                    encoding_raw = GLib.Marshaller.StringToPtrGStrdup (encoding),
                     base_uri_raw = GLib.Marshaller.StringToPtrGStrdup (baseUri));
             } finally {
                 GLib.Marshaller.Free (content_raw);
-                GLib.Marshaller.Free (mimetype_raw);
-                GLib.Marshaller.Free (encoding_raw);
                 GLib.Marshaller.Free (base_uri_raw);
             }
         }
@@ -301,12 +295,7 @@ namespace Banshee.WebBrowser
             get { return GLib.Marshaller.Utf8PtrToString (ossifer_web_view_get_title (Handle)); }
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OssiferLoadStatus ossifer_web_view_get_load_status (IntPtr ossifer);
-
-        public virtual OssiferLoadStatus LoadStatus {
-            get { return ossifer_web_view_get_load_status (Handle); }
-        }
+        public virtual OssiferLoadStatus LoadStatus { get; private set; }
 
         [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
         private static extern OssiferSecurityLevel ossifer_web_view_get_security_level (IntPtr ossifer);
