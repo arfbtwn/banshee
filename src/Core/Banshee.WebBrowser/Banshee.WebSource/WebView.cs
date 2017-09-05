@@ -26,7 +26,7 @@
 // THE SOFTWARE.
 
 using System;
-
+using System.Runtime.InteropServices;
 using Gtk;
 
 using Hyena;
@@ -55,6 +55,7 @@ namespace Banshee.WebSource
         }
 
         const float ZOOM_STEP = 0.05f;
+        private double smooth_scroll_size;
 
         public void ZoomIn ()
         {
@@ -66,13 +67,38 @@ namespace Banshee.WebSource
             Zoom -= ZOOM_STEP;
         }
 
+        [DllImport ("libgdk-3-0.dll", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr gdk_event_get_scroll_deltas (IntPtr eventHandle, out double deltaX, out double deltaY);
+
         protected override bool OnScrollEvent (Gdk.EventScroll scroll)
         {
             if ((scroll.State & Gdk.ModifierType.ControlMask) != 0) {
-                Zoom += (scroll.Direction == Gdk.ScrollDirection.Up) ? ZOOM_STEP : -ZOOM_STEP;
+                switch (scroll.Direction) {
+                    case Gdk.ScrollDirection.Up:
+                        ZoomIn ();
+                        break;
+                    case Gdk.ScrollDirection.Down:
+                        ZoomOut ();
+                        break;
+                    case (Gdk.ScrollDirection)4: //GDK_SCROLL_SMOOTH
+                        double delta_x;
+                        double delta_y;
+                        gdk_event_get_scroll_deltas (scroll.Handle, out delta_x, out  delta_y);
+                        smooth_scroll_size += delta_y;
+
+                        if (smooth_scroll_size < -1) {
+                            ZoomIn ();
+                            smooth_scroll_size += 1;
+                        } else if (smooth_scroll_size > 1) {
+                            ZoomOut ();
+                            smooth_scroll_size -= 1;
+                        }
+                        break;
+                    default:
+                        return true;
+                }
                 return true;
             }
-
             return base.OnScrollEvent (scroll);
         }
 

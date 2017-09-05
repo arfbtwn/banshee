@@ -48,6 +48,9 @@ RESOURCES =  \
 
 if HAVE_LIBWEBKIT
 include $(top_srcdir)/build/build.mk
+module_SCRIPTS += Banshee.WebBrowser.dll.config
 else
 include $(top_srcdir)/build/build.dist.mk
 endif
+
+EXTRA_DIST += Banshee.WebBrowser.dll.config
