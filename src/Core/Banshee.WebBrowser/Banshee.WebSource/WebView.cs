@@ -54,28 +54,6 @@ namespace Banshee.WebSource
             CanSearch = false;
         }
 
-        const float ZOOM_STEP = 0.05f;
-
-        public void ZoomIn ()
-        {
-            Zoom += ZOOM_STEP;
-        }
-
-        public void ZoomOut ()
-        {
-            Zoom -= ZOOM_STEP;
-        }
-
-        protected override bool OnScrollEvent (Gdk.EventScroll scroll)
-        {
-            if ((scroll.State & Gdk.ModifierType.ControlMask) != 0) {
-                Zoom += (scroll.Direction == Gdk.ScrollDirection.Up) ? ZOOM_STEP : -ZOOM_STEP;
-                return true;
-            }
-
-            return base.OnScrollEvent (scroll);
-        }
-
         protected override void OnLoadStatusChanged (OssiferLoadStatus status)
         {
             if ((status == OssiferLoadStatus.FirstVisuallyNonEmptyLayout ||

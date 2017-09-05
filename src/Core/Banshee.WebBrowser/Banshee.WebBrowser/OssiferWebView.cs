@@ -254,6 +254,30 @@ namespace Banshee.WebBrowser
             }
         }
 
+        const float ZoomStep = 0.05f;
+
+        public void ZoomIn ()
+        {
+            Zoom += ZoomStep;
+        }
+
+        public void ZoomOut ()
+        {
+            Zoom -= ZoomStep;
+        }
+
+        protected override bool OnScrollEvent (Gdk.EventScroll scroll)
+        {
+            //TODO: Handle smooth scroll events when gtk-sharp exposes deltaX/Y fields.
+            //      See https://github.com/arfbtwn/banshee/issues/37
+            /*if ((scroll.State & Gdk.ModifierType.ControlMask) != 0) {
+                Zoom += (scroll.Direction == Gdk.ScrollDirection.Up) ? ZOOM_STEP : -ZOOM_STEP;
+                return true;
+            }*/
+
+            return base.OnScrollEvent (scroll);
+        }
+
         [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_reload (IntPtr ossifer);
 

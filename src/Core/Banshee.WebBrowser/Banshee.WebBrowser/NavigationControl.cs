@@ -36,12 +36,15 @@ namespace Banshee.WebBrowser
 {
     public class NavigationControl : HBox
     {
-        private Button back_button = new Button (new Image (Stock.GoBack, IconSize.Button)) { Relief = ReliefStyle.None };
-        private Button forward_button = new Button (new Image (Stock.GoForward, IconSize.Button)) { Relief = ReliefStyle.None };
-        private Button reload_button = new Button (new Image (Stock.Refresh, IconSize.Button)) { Relief = ReliefStyle.None };
-        private Button home_button = new Button (new Image (Stock.Home, IconSize.Button)) { Relief = ReliefStyle.None };
-        private Menu shortcut_menu = new Menu ();
-        private MenuButton shortcut_menu_button;
+        private readonly Button back_button = new Button (new Image (Stock.GoBack, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Button forward_button = new Button (new Image (Stock.GoForward, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Button reload_button = new Button (new Image (Stock.Refresh, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Button home_button = new Button (new Image (Stock.Home, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Button zoom_in_button = new Button(new Image(Stock.ZoomIn, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Button zoom_out_button = new Button(new Image(Stock.ZoomOut, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Button zoom_100_button = new Button(new Image(Stock.Zoom100, IconSize.Button)) { Relief = ReliefStyle.None };
+        private readonly Menu shortcut_menu = new Menu ();
+        private readonly MenuButton shortcut_menu_button;
 
         public event EventHandler GoHomeEvent;
 
@@ -59,17 +62,20 @@ namespace Banshee.WebBrowser
                 }
             };
 
-            reload_button.Clicked += (o, e) => {
-                if (web_view != null) {
-                    web_view.Reload (!GtkUtilities.NoImportantModifiersAreSet ());
-                }
-            };
+            reload_button.Clicked += (o, e) => web_view?.Reload (!GtkUtilities.NoImportantModifiersAreSet ());
 
             home_button.Clicked += (o, e) => {
                 var handler = GoHomeEvent;
-                if (handler != null) {
-                    handler (this, EventArgs.Empty);
-                }
+                handler?.Invoke (this, EventArgs.Empty);
+            };
+
+            zoom_in_button.Clicked += (o, e) => web_view?.ZoomIn ();
+
+            zoom_out_button.Clicked += (o, e) => web_view?.ZoomOut ();
+
+            zoom_100_button.Clicked += (o, e) => {
+                if (web_view != null)
+                    web_view.Zoom = 1f;
             };
 
             shortcut_menu_button = new MenuButton (home_button, shortcut_menu, true);
@@ -80,6 +86,9 @@ namespace Banshee.WebBrowser
             PackStart (forward_button, false, false, 0);
             PackStart (reload_button, false, false, 5);
             PackStart (shortcut_menu_button, false, false, 0);
+            PackStart (zoom_in_button, false, false, 0);
+            PackStart (zoom_out_button, false, false, 0);
+            PackStart (zoom_100_button, false, false, 0);
 
             ShowAll ();
             ClearLinks ();
