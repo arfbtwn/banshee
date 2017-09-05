@@ -26,38 +26,42 @@
 // THE SOFTWARE.
 
 using System;
-using Banshee.Base;
-using Banshee.WebBrowser;
-using GLib;
+
+using Gtk;
+
+using Hyena;
 using Hyena.Downloader;
-using EventArgs = System.EventArgs;
-using EventHandler = System.EventHandler;
-using Log = Hyena.Log;
+
+using Banshee.Base;
+using Banshee.IO;
+using Banshee.WebBrowser;
 
 namespace Banshee.WebSource
 {
     public abstract class WebView : OssiferWebView
     {
+        protected string FixupJavascriptUrl { get; set; }
         private string fixup_javascript;
         private bool fixup_javascript_fetched;
-
-        public WebView ()
-        {
-            CanSearch = false;
-        }
-
-        protected string FixupJavascriptUrl { get; set; }
 
         public bool IsReady { get; private set; }
         public bool CanSearch { get; protected set; }
 
         public event EventHandler Ready;
 
+        public WebView ()
+        {
+            CanSearch = false;
+        }
+
         protected override void OnLoadStatusChanged (OssiferLoadStatus status)
         {
             if ((status == OssiferLoadStatus.FirstVisuallyNonEmptyLayout ||
-                 status == OssiferLoadStatus.Finished) &&
-                Uri != "about:blank") if (fixup_javascript != null) ExecuteScript (fixup_javascript);
+                status == OssiferLoadStatus.Finished) && Uri != "about:blank") {
+                if (fixup_javascript != null) {
+                    ExecuteScript (fixup_javascript);
+                }
+            }
 
             base.OnLoadStatusChanged (status);
         }
@@ -93,17 +97,17 @@ namespace Banshee.WebSource
             // messages, since we do the streaming of previews natively.
             if (FixupJavascriptUrl != null && !fixup_javascript_fetched) {
                 fixup_javascript_fetched = true;
-                new HttpStringDownloader
-                {
+                new Hyena.Downloader.HttpStringDownloader () {
                     Uri = new Uri (FixupJavascriptUrl),
-                    Finished = d => {
-                        if (d.State.Success) fixup_javascript = d.Content;
+                    Finished = (d) => {
+                        if (d.State.Success) {
+                            fixup_javascript = d.Content;
+                        }
                         LoadHome ();
                     },
-                    AcceptContentTypes = new[] {"text/javascript"}
+                    AcceptContentTypes = new [] { "text/javascript" }
                 }.Start ();
-            }
-            else {
+            } else {
                 LoadHome ();
             }
         }
@@ -112,7 +116,7 @@ namespace Banshee.WebSource
         {
             // We defer this to another main loop iteration, otherwise
             // our load placeholder document will never be rendered.
-            Idle.Add (delegate {
+            GLib.Idle.Add (delegate {
                 GoHome ();
 
                 // Emit the Ready event once we are first allowed
@@ -121,7 +125,9 @@ namespace Banshee.WebSource
                 if (!IsReady) {
                     IsReady = true;
                     var handler = Ready;
-                    handler?.Invoke (this, EventArgs.Empty);
+                    if (handler != null) {
+                        handler (this, EventArgs.Empty);
+                    }
                 }
                 return false;
             });
