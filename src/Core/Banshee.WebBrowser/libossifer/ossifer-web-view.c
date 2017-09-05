@@ -65,97 +65,6 @@ struct OssiferWebViewPrivate {
 // OssiferWebView Internal Implementation
 // ---------------------------------------------------------------------------
 
-/*static const gchar *
-ossifer_web_view_download_get_mimetype (WebKitDownload *download)
-{
-    return soup_message_headers_get_content_type (
-        webkit_network_response_get_message (
-            webkit_download_get_network_response (download)
-        )->response_headers, NULL);
-}*/
-
-/*static WebKitWebView *
-ossifer_web_view_create_web_view (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
-{
-    return web_view;
-}*/
-
-/*static void
-ossifer_web_view_resource_request_starting (WebKitWebView *web_view, WebKitWebFrame *frame, //TODO
-    WebKitWebResource *resource, WebKitNetworkRequest *request,
-    WebKitNetworkResponse *response, gpointer user_data)
-{
-    OssiferWebView *ossifer = OSSIFER_WEB_VIEW (web_view);
-    const gchar *old_uri;
-    gchar *new_uri = NULL;
-
-    if (ossifer->priv->callbacks.resource_request_starting != NULL) {
-        old_uri = webkit_network_request_get_uri (request);
-        new_uri = ossifer->priv->callbacks.resource_request_starting (ossifer, old_uri);
-        if (new_uri) {
-            webkit_network_request_set_uri (request, new_uri);
-            g_free (new_uri);
-        }
-    }
-}*/
-
-/*static gboolean
-ossifer_web_view_mime_type_policy_decision_requested (WebKitWebView *web_view, WebKitWebFrame *frame,
-    WebKitNetworkRequest *request, gchar *mimetype, WebKitWebPolicyDecision *policy_decision, gpointer user_data)
-{
-    OssiferWebView *ossifer = OSSIFER_WEB_VIEW (web_view);
-
-    if (ossifer->priv->callbacks.mime_type_policy_decision_requested == NULL) {
-        return FALSE;
-    }
-
-    switch ((gint)ossifer->priv->callbacks.mime_type_policy_decision_requested (ossifer, mimetype)) {
-        case 1000 /* Ossifer addition for 'unhandled' *//*:
-            return FALSE;
-        case (gint)WEBKIT_NAVIGATION_RESPONSE_DOWNLOAD:
-            webkit_web_policy_decision_download (policy_decision);
-            break;
-        case (gint)WEBKIT_NAVIGATION_RESPONSE_IGNORE:
-            webkit_web_policy_decision_ignore (policy_decision);
-            break;
-        case (gint)WEBKIT_NAVIGATION_RESPONSE_ACCEPT:
-        default:
-            webkit_web_policy_decision_use (policy_decision);
-            break;
-    }
-
-    return TRUE;
-}*/
-
-/*static gboolean
-ossifer_web_view_navigation_policy_decision_requested (WebKitWebView *web_view, WebKitWebFrame *frame,
-    WebKitNetworkRequest *request, WebKitWebNavigationAction *action, WebKitWebPolicyDecision *policy_decision, gpointer user_data)
-{
-    OssiferWebView *ossifer = OSSIFER_WEB_VIEW (web_view);
-
-    if (ossifer->priv->callbacks.navigation_policy_decision_requested == NULL) {
-        return FALSE;
-    }
-
-    const gchar * uri = webkit_network_request_get_uri (request);
-    switch ((gint)ossifer->priv->callbacks.navigation_policy_decision_requested (ossifer, uri)) {
-        case 1000 /* Ossifer addition for 'unhandled' *//*:
-            return FALSE;
-        case (gint)WEBKIT_NAVIGATION_RESPONSE_DOWNLOAD:
-            webkit_web_policy_decision_download (policy_decision);
-            break;
-        case (gint)WEBKIT_NAVIGATION_RESPONSE_IGNORE:
-            webkit_web_policy_decision_ignore (policy_decision);
-            break;
-        case (gint)WEBKIT_NAVIGATION_RESPONSE_ACCEPT:
-        default:
-            webkit_web_policy_decision_use (policy_decision);
-            break;
-    }
-
-    return TRUE;
-}*/
-
 static gboolean
 ossifer_web_view_decide_policy (WebKitWebView *web_view, WebKitPolicyDecision *decision, WebKitPolicyDecisionType type, gpointer user_data)
 {
@@ -241,9 +150,6 @@ ossifer_download_decide_destination (WebKitDownload *download, gchar *suggested_
 
     webkit_download_set_destination (download, destination_uri);
 
-    /*g_signal_connect (download, "notify::status",
-        G_CALLBACK (ossifer_web_view_download_notify_status), ossifer);*/
-
     g_free (destination_uri);
 
     return TRUE;
@@ -296,31 +202,6 @@ ossifer_web_context_download_started (WebKitWebContext *context, WebKitDownload 
     g_signal_connect (download, "failed",
         G_CALLBACK (ossifer_download_failed), ossifer);
 }
-
-/*static void
-ossifer_web_view_download_notify_status (GObject* object, GParamSpec* pspec, gpointer user_data)
-{
-    OssiferWebView *ossifer = OSSIFER_WEB_VIEW (user_data);
-    WebKitDownload* download = WEBKIT_DOWNLOAD (object);
-
-    if (ossifer->priv->callbacks.download_status_changed != NULL) {
-        ossifer->priv->callbacks.download_status_changed (ossifer,
-            webkit_download_get_status (download), //TODO
-            webkit_uri_response_get_mime_type(webkit_download_get_response (download)),
-            webkit_download_get_destination (download));
-    }
-}*/
-
-/*static void
-ossifer_web_view_notify_load_status (GObject* object, GParamSpec* pspec, gpointer user_data)
-{
-    OssiferWebView *ossifer = OSSIFER_WEB_VIEW (object);
-
-    if (ossifer->priv->callbacks.load_status_changed != NULL) {
-        ossifer->priv->callbacks.load_status_changed (ossifer,
-            webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (ossifer)));
-    }
-}*/
 
 static void
 ossifer_web_view_update_security_status (OssiferWebView *ossifer, const char *uri)
@@ -422,12 +303,6 @@ ossifer_web_view_init (OssiferWebView *ossifer)
 
     webkit_settings_set_enable_plugins (settings, FALSE);
     webkit_settings_set_enable_page_cache (settings, TRUE);
-
-    /*g_signal_connect (ossifer, "mime-type-policy-decision-requested",
-        G_CALLBACK (ossifer_web_view_mime_type_policy_decision_requested), NULL);*/
-
-    /*g_signal_connect (ossifer, "navigation-policy-decision-requested",
-        G_CALLBACK (ossifer_web_view_navigation_policy_decision_requested), NULL);*/
         
     g_signal_connect (ossifer, "decide-policy",
         G_CALLBACK (ossifer_web_view_decide_policy), NULL);
@@ -440,15 +315,6 @@ ossifer_web_view_init (OssiferWebView *ossifer)
         
     g_signal_connect (ossifer, "load-failed",
         G_CALLBACK (ossifer_web_view_load_failed), NULL);
-
-    /*g_signal_connect (ossifer, "create-plugin-widget",
-        G_CALLBACK (ossifer_web_view_create_plugin_widget), NULL);*/
-
-    /*g_signal_connect (ossifer, "create-web-view",
-        G_CALLBACK (ossifer_web_view_create_web_view), NULL);*/
-
-    /*g_signal_connect (ossifer, "resource-request-starting",
-        G_CALLBACK (ossifer_web_view_resource_request_starting), NULL);*/
 }
 
 // ---------------------------------------------------------------------------
@@ -559,31 +425,4 @@ ossifer_web_view_get_security_level (OssiferWebView *ossifer)
     g_return_val_if_fail (OSSIFER_WEB_VIEW (ossifer), OSSIFER_SECURITY_IS_UNKNOWN);
     
     return ossifer->priv->level;
-
-    /*OssiferSecurityLevel security_level = OSSIFER_SECURITY_IS_UNKNOWN;
-    WebKitWebView *web_view = WEBKIT_WEB_VIEW (ossifer);
-      
-    const gchar* uri = webkit_web_view_get_uri (web_view);
-
-    if (uri && g_str_has_prefix (uri, "https")) {
-        WebKitWebFrame *frame;
-        WebKitWebDataSource *source;
-        WebKitNetworkRequest *request;
-        SoupMessage *message;
-
-        frame = webkit_web_view_get_main_frame (web_view);
-        source = webkit_web_frame_get_data_source (frame);
-        request = webkit_web_data_source_get_request (source);
-        message = webkit_network_request_get_message (request);
-
-        if (message && (soup_message_get_flags (message) & SOUP_MESSAGE_CERTIFICATE_TRUSTED)) {
-            security_level = OSSIFER_SECURITY_IS_SECURE;
-        } else {
-            security_level = OSSIFER_SECURITY_IS_BROKEN;
-        }
-    } else {
-        security_level = OSSIFER_SECURITY_IS_UNKNOWN;
-    }
-    
-    return security_level;*/
 }
