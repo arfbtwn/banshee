@@ -392,6 +392,13 @@ ossifer_web_view_reload (OssiferWebView *ossifer)
 }
 
 void
+ossifer_web_view_stop_loading (OssiferWebView *ossifer)
+{
+    g_return_if_fail (OSSIFER_WEB_VIEW (ossifer));
+    webkit_web_view_stop_loading (WEBKIT_WEB_VIEW (ossifer));
+}
+
+void
 ossifer_web_view_set_zoom (OssiferWebView *ossifer, gfloat zoomLevel)
 {
     g_return_if_fail (OSSIFER_WEB_VIEW (ossifer));
