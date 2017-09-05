@@ -28,6 +28,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+
 using Gdk;
 using GLib;
 
@@ -94,7 +95,8 @@ namespace Banshee.WebSource
                         if (smooth_scroll_size < -1) {
                             ZoomIn ();
                             smooth_scroll_size += 1;
-                        } else if (smooth_scroll_size > 1) {
+                        }
+                        else if (smooth_scroll_size > 1) {
                             ZoomOut ();
                             smooth_scroll_size -= 1;
                         }
@@ -117,7 +119,6 @@ namespace Banshee.WebSource
                         break;
                 }
             }
-
             base.OnLoadStatusChanged (status);
         }
 
@@ -161,9 +162,10 @@ namespace Banshee.WebSource
                         }
                         LoadHome ();
                     },
-                    AcceptContentTypes = new [] { "text/javascript" }
+                    AcceptContentTypes = new[] {"text/javascript"}
                 }.Start ();
-            } else {
+            }
+            else {
                 LoadHome ();
             }
         }
