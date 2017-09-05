@@ -85,6 +85,8 @@ namespace Banshee.WebSource
                 var zoom_conf = CreateSchema<double> ("webview_zoom", 1f, null, null);
                 shell.View.Zoom = (float)zoom_conf.Get ();
                 shell.View.ZoomChanged += z => zoom_conf.Set (z);
+                shell.View.Parent.Shown += delegate {
+                    Log.Debug ("Shown"); GetWidget ().View.Reload(); };
                 view = shell.View;
 
                 Properties.Set<ISourceContents> ("Nereid.SourceContents",
@@ -108,6 +110,11 @@ namespace Banshee.WebSource
             base.Activate ();
         }
 
+        public override void Deactivate ()
+        {
+            GetWidget ().View.StopLoading ();
+        }
+
         protected abstract WebBrowserShell GetWidget ();
 
         public override int Count {
@@ -127,6 +134,7 @@ namespace Banshee.WebSource
 
             public bool SetSource (ISource source)
             {
+                this.source.view.Reload ();
                 return true;
             }
 

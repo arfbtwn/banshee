@@ -269,6 +269,14 @@ namespace Banshee.WebBrowser
         }
 
         [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void ossifer_web_view_stop_loading (IntPtr ossifer);
+
+        public void StopLoading ()
+        {
+            ossifer_web_view_stop_loading (Handle);
+        }
+
+        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_execute_script (IntPtr ossifer, IntPtr script);
 
         public void ExecuteScript (string script)
