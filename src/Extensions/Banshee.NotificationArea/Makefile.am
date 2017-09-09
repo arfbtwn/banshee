@@ -1,22 +1,13 @@
-if EXTERNAL_NOTIFY_SHARP
-NOTIFY_SHARP_LIBS = $(NOTIFY_SHARP_LIBS)
-else
-MCS_FLAGS+="-define:INTERNAL_NOTIFY_SHARP"
-NOTIFY_SHARP_LIBS = 
-endif
-
 ASSEMBLY = Banshee.NotificationArea
 TARGET = library
-LINK = $(REF_EXTENSION_NOTIFICATIONAREA) $(NOTIFY_SHARP_LIBS)
+LINK = $(REF_EXTENSION_NOTIFICATIONAREA)
 INSTALL_DIR = $(EXTENSIONS_INSTALL_DIR)
 
 SOURCES =  \
 	Banshee.NotificationArea/GtkNotificationAreaBox.cs \
 	Banshee.NotificationArea/INotificationAreaBox.cs \
 	Banshee.NotificationArea/NotificationAreaService.cs \
-	Banshee.NotificationArea/TrackInfoPopup.cs \
-	Notifications/Notification.cs \
-	Notifications/Notifications.cs
+	Banshee.NotificationArea/TrackInfoPopup.cs
 
 RESOURCES =  \
 	Banshee.NotificationArea.addin.xml \

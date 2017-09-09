@@ -84,9 +84,6 @@ BANSHEE_CHECK_DBUS_SHARP
 dnl Mono.Addins libraries
 BANSHEE_CHECK_MONO_ADDINS
 
-dnl notify-sharp library
-BANSHEE_CHECK_NOTIFY_SHARP
-
 dnl Monodoc (optional through --disable-docs)
 SHAMROCK_CHECK_MONODOC
 
@@ -270,6 +267,7 @@ src/Libraries/Mono.Media/Makefile
 src/Libraries/Mtp/Makefile
 src/Libraries/Mtp/Mtp.dll.config
 src/Libraries/MusicBrainz/Makefile
+src/Libraries/Notifications/Makefile
 
 src/Dap/Makefile
 src/Dap/Banshee.Dap/Makefile
