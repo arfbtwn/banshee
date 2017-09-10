@@ -8,7 +8,11 @@ SOURCES = Banshee.MultimediaKeys/MultimediaKeysService.cs
 RESOURCES = Banshee.MultimediaKeys.addin.xml
 
 if ENABLE_GNOME
+if ENABLE_MULTIMEDIAKEYS
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 else
 include $(top_srcdir)/build/build.dist.mk
 endif

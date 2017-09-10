@@ -20,10 +20,12 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\bin</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\bin</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Banshee.Services\Banshee.Services.csproj">
@@ -296,6 +298,7 @@
     <Compile Include="Banshee.Gui\ArtistListActions.cs" />
     <Compile Include="Banshee.Collection.Gui\ColumnCellArtistText.cs" />
     <Compile Include="Banshee.Collection.Gui\IArtistListRenderer.cs" />
+    <Compile Include="Banshee.Gui\Safe.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

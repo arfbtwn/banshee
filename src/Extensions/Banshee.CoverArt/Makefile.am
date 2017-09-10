@@ -9,4 +9,8 @@ SOURCES =  \
 
 RESOURCES = Banshee.CoverArt.addin.xml
 
+if ENABLE_COVERART
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif

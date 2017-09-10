@@ -90,7 +90,7 @@ namespace Banshee.Gui
                     Catalog.GetString ("Export a playlist"), OnExportPlaylist),
 
                 new ActionEntry ("UnmapSourceAction", null,
-                    Catalog.GetString ("Unmap"), "<shift>Delete", null, OnUnmapSource),
+                    Catalog.GetString ("Unmap"), "<shift>Delete", Catalog.GetString("Unmap"), OnUnmapSource),
 
                 new ActionEntry ("SourcePropertiesAction", null,
                     Catalog.GetString ("Source Properties"), null, null, OnSourceProperties),

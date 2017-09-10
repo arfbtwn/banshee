@@ -36,9 +36,8 @@ RESOURCES =  \
 	Daap/content-codes \
 	Resources/GlobalUI.xml
 
-if DAAP_ENABLED
+if ENABLE_DAAP
 include $(top_srcdir)/build/build.mk
 else
 include $(top_srcdir)/build/build.dist.mk
 endif
-

@@ -51,12 +51,12 @@ namespace Banshee.Dap.Gui
             AddImportant (
                 new ActionEntry ("ClaimDapAction", null,
                     Catalog.GetString ("Claim"), null,
-                    String.Empty, OnClaimDap)
+                    Catalog.GetString ("Claim"), OnClaimDap)
             );
             AddImportant (
                 new ActionEntry ("SyncDapAction", null,
                     Catalog.GetString ("Sync"), null,
-                    String.Empty, OnSyncDap)
+                    Catalog.GetString ("Sync"), OnSyncDap)
             );
 
             AddUiFromFile ("GlobalUI.xml");

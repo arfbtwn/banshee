@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="faac-aac">
-      <_name>AAC (FAAC Encoder)</_name>
-      <_description>Designed to be the successor of the MP3 format, AAC generally achieves better sound quality than MP3 at many bit rates.</_description>
+      <name>AAC (FAAC Encoder)</name>
+      <description>Designed to be the successor of the MP3 format, AAC generally achieves better sound quality than MP3 at many bit rates.</description>
       <output-file-extension>m4a</output-file-extension>
       <mimetype>audio/aac</mimetype>
       <mimetype>audio/mp4</mimetype>
@@ -26,7 +26,7 @@
         ]]>
         </process>
         <variable id="bitrate">
-          <_name>Bitrate</_name>
+          <name>Bitrate</name>
           <control-type>combo</control-type>
           <default-value>128</default-value>
           <possible-values>

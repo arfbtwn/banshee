@@ -66,16 +66,16 @@ namespace Banshee.Collection.Gui
             };
             ViewLayout = grid_layout;
 
+            DisableAlbumGridPref = new SchemaPreference<bool> (DisableAlbumGrid,
+                    Catalog.GetString ("Disable album grid"),
+                    Catalog.GetString ("Disable album grid and show the classic layout instead"),
+                    ToggleAlbumGrid);
+
             ServiceManager.SourceManager.SourceRemoved += UninstallPreferences;
             ServiceManager.SourceManager.SourceAdded += InstallPreferences;
             if (ServiceManager.SourceManager.MusicLibrary != null) {
                 InstallPreferences ();
             }
-
-            DisableAlbumGridPref =  new SchemaPreference<bool> (DisableAlbumGrid,
-                    Catalog.GetString ("Disable album grid"),
-                    Catalog.GetString ("Disable album grid and show the classic layout instead"),
-                    ToggleAlbumGrid);
 
             ServiceManager.PlayerEngine.ConnectEvent (OnPlayerEvent, PlayerEvent.TrackInfoUpdated);
             Banshee.Metadata.MetadataService.Instance.ArtworkUpdated += OnArtworkUpdated;

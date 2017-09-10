@@ -41,4 +41,8 @@ RESOURCES =  \
 	Resources/ActiveSourceUI.xml \
 	Resources/GlobalUI.xml
 
+if ENABLE_PODCASTING
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif

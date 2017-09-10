@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="vorbis">
-      <_name>Ogg Vorbis</_name>
-      <_description>Vorbis is an open source, lossy audio codec with high quality output at a lower file size than MP3.</_description>
+      <name>Ogg Vorbis</name>
+      <description>Vorbis is an open source, lossy audio codec with high quality output at a lower file size than MP3.</description>
       <output-file-extension>ogg</output-file-extension>
       <mimetype>audio/x-ogg</mimetype>
       <mimetype>audio/ogg</mimetype>
@@ -25,12 +25,12 @@
         ]]>
         </process>
         <variable id="quality">
-          <_name>Audio quality</_name>
+          <name>Audio quality</name>
           <control-type>slider</control-type>
           <min-value>-1.0</min-value>
-          <_min-label>Worst</_min-label>
+          <min-label>Worst</min-label>
           <max-value>10.0</max-value>
-          <_max-label>Best</_max-label>
+          <max-label>Best</max-label>
           <step-value>1.0</step-value>
           <default-value>5.0</default-value>
         </variable>

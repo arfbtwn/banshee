@@ -60,7 +60,6 @@ namespace Banshee.Metadata
         {
             AddProvider (new Banshee.Metadata.Embedded.EmbeddedMetadataProvider ());
             AddProvider (new Banshee.Metadata.FileSystem.FileSystemMetadataProvider ());
-            AddProvider (new Banshee.Metadata.Rhapsody.RhapsodyMetadataProvider ());
             AddProvider (new Banshee.Metadata.MusicBrainz.MusicBrainzMetadataProvider ());
             AddProvider (new Banshee.Metadata.LastFM.LastFMMetadataProvider ());
 

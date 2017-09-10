@@ -46,12 +46,7 @@ namespace Banshee.Dap
 
         private bool initialized;
 
-        protected PotentialSource ()
-        {
-            SupportsPlaylists = false;
-            SupportsPodcasts = false;
-            SupportsVideo = false;
-        }
+        protected PotentialSource () { }
 
         #region overridden members of Source
 

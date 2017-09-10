@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="wavpack">
-      <_name>Wavpack</_name>
-      <_description>A fast and efficient open source audio format offering lossless and high-quality lossy encoding with great dynamic range.</_description>
+      <name>Wavpack</name>
+      <description>A fast and efficient open source audio format offering lossless and high-quality lossy encoding with great dynamic range.</description>
       <output-file-extension>wv</output-file-extension>
       <mimetype>audio/x-wavpack</mimetype>
       <mimetype>application/x-apetag</mimetype>
@@ -28,44 +28,44 @@
         ]]>
         </process>
         <variable id="mode">
-          <_name>Mode</_name>
+          <name>Mode</name>
           <control-type>combo</control-type>
           <default-value>2</default-value>
           <possible-values>
-            <_value value="1">Fast Compression</_value>
-            <_value value="2">Default Compression</_value>
-            <_value value="3">High Compression</_value>
-            <_value value="4">Very High Compression</_value>
+            <value value="1">Fast Compression</value>
+            <value value="2">Default Compression</value>
+            <value value="3">High Compression</value>
+            <value value="4">Very High Compression</value>
           </possible-values>
         </variable>
         <variable id="lossy_mode" enables="bitrate">
-          <_name>Lossy mode</_name>
+          <name>Lossy mode</name>
           <control-type>check</control-type>
           <default-value>0</default-value>
         </variable>
+          <name>Store MD5 sum in the file</name>
         <variable id="md5_sum">
-          <_name>Store MD5 sum in the file</_name>
           <control-type>check</control-type>
           <default-value>0</default-value>
         </variable>
+          <name>Extra processing</name>
         <variable id="extra_processing">
-          <_name>Extra processing</_name>
           <control-type>slider</control-type>
           <default-value>0</default-value>
           <min-value>0</min-value>
-          <_min-label>Default</_min-label>
+          <min-label>Default</min-label>
           <max-value>6</max-value>
-          <_max-label>Highest</_max-label>
+          <max-label>Highest</max-label>
           <step-value>1</step-value>
         </variable>
         <variable id="bitrate">
-          <_name>Bitrate</_name>
+          <name>Bitrate</name>
           <control-type>slider</control-type>
           <default-value>260</default-value>
           <min-value>24</min-value>
-          <_min-label>Worst</_min-label>
+          <min-label>Worst</min-label>
           <max-value>9600</max-value>
-          <_max-label>Best</_max-label>
+          <max-label>Best</max-label>
           <step-value>32</step-value>
         </variable>
       </pipeline>

@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="lame-mp3">
-      <_name>MP3 (LAME Encoder)</_name>
-      <_description>A proprietary and older, but also popular, lossy audio format that produces larger files at lower bitrates.</_description>
+      <name>MP3 (LAME Encoder)</name>
+      <description>A proprietary and older, but also popular, lossy audio format that produces larger files at lower bitrates.</description>
       <output-file-extension>mp3</output-file-extension>
       <mimetype>audio/mp3</mimetype>
       <mimetype>taglib/mp3</mimetype>
@@ -37,26 +37,26 @@
         ]]>
         </process>
         <variable id="encoding_mode">
-          <_name>Encoding Mode</_name>
+          <name>Encoding Mode</name>
           <control-type>combo</control-type>
           <default-value>0</default-value>
           <possible-values>
-            <_value value="0" disables="vbr_quality" enables="bitrate" >Constant Bitrate</_value>
-            <_value value="4" disables="bitrate" enables="vbr_quality">Variable Bitrate</_value>
+            <value value="0" disables="vbr_quality" enables="bitrate" >Constant Bitrate</value>
+            <value value="4" disables="bitrate" enables="vbr_quality">Variable Bitrate</value>
           </possible-values>
         </variable>
         <variable id="vbr_quality">
-          <_name>VBR Quality</_name>
+          <name>VBR Quality</name>
           <control-type>slider</control-type>
           <min-value>0</min-value>
-          <_min-label>Worst</_min-label>
+          <min-label>Worst</min-label>
           <max-value>9</max-value>
-          <_max-label>Best</_max-label>
+          <max-label>Best</max-label>
           <step-value>1</step-value>
           <default-value>7</default-value>
         </variable>
         <variable id="bitrate">
-          <_name>Bitrate</_name>
+          <name>Bitrate</name>
           <control-type>combo</control-type>
           <default-value>128</default-value>
           <possible-values>

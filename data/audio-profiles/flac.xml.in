@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="flac">
-      <_name>Free Lossless Audio Codec</_name>
-      <_description>Free Lossless Audio Codec (FLAC) is an open source codec that compresses but does not degrade audio quality.</_description>
+      <name>Free Lossless Audio Codec</name>
+      <description>Free Lossless Audio Codec (FLAC) is an open source codec that compresses but does not degrade audio quality.</description>
       <output-file-extension>flac</output-file-extension>
       <mimetype>application/x-flac</mimetype>
       <mimetype>audio/flac</mimetype>

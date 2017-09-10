@@ -2,8 +2,8 @@
 <audio-profiles>
   <profiles>
     <profile id="xing-mp3">
-      <_name>MP3 (Xing Encoder)</_name>
-      <_description>A proprietary and older, but also popular, lossy audio format that produces larger files at lower bitrates.</_description>
+      <name>MP3 (Xing Encoder)</name>
+      <description>A proprietary and older, but also popular, lossy audio format that produces larger files at lower bitrates.</description>
       <output-file-extension>mp3</output-file-extension>
       <mimetype>audio/mp3</mimetype>
       <mimetype>taglib/mp3</mimetype>
@@ -25,7 +25,7 @@
         ]]>
         </process>
         <variable id="bitrate">
-          <_name>Bitrate</_name>
+          <name>Bitrate</name>
           <control-type>combo</control-type>
           <default-value>128</default-value>
           <possible-values>

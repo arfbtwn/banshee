@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<locatingRules>
+  <locatingRule name="Mono.Addin" pattern="*.addin.xml">
+    <documentRule localName="Addin" target="addin.its"/>
+  </locatingRule>
+</locatingRules>

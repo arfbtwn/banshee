@@ -11,10 +11,11 @@ else
 UPDATE_MIME_FILES = yes
 endif
 
+%.desktop: %.desktop.in
+	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
+
 %.desktop.in: %.desktop.in.in $(DESKTOP_FRAMEWORK_DEPS) $(DESKTOP_MIME_DEPS)
 	./update-desktop-file.sh "$<" "$(VERSION)" "$(UPDATE_MIME_FILES)" > "$@"
-
-@INTLTOOL_DESKTOP_RULE@
 
 install-data-hook:
 	test -f $(DESTDIR)$(datadir)/applications/defaults.list && \

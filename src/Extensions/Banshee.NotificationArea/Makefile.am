@@ -16,8 +16,12 @@ RESOURCES =  \
 if PLATFORM_DARWIN
 include $(top_srcdir)/build/build.dist.mk
 else
+if ENABLE_NOTIFICATIONAREA
 include $(top_srcdir)/build/build.mk
 module_SCRIPTS += Banshee.NotificationArea.dll.config
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 endif
 
 EXTRA_DIST += Banshee.NotificationArea.dll.config

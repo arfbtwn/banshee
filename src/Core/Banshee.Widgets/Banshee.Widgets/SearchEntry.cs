@@ -79,8 +79,8 @@ namespace Banshee.Widgets
         private void ShowMenu (uint time)
         {
             if (menu.Children.Length > 0) {
-                menu.Popup (null, null, null, 0, time);
                 menu.ShowAll ();
+                menu.Popup (null, null, null, 0, time);
             }
         }
 
@@ -195,10 +195,8 @@ namespace Banshee.Widgets
         // we have to handle it ourselves
         protected override bool OnDrawn (Cairo.Context cr)
         {
-            bool ret = base.OnDrawn (cr);
-
             if(Text.Length > 0 || HasFocus || EmptyMessage == null) {
-                return ret;
+                return base.OnDrawn (cr);
             }
 
             Layout.SetMarkup (EmptyMessage);
@@ -211,7 +209,7 @@ namespace Banshee.Widgets
                 Convert.ToUInt16 (color.Green * 65535), Convert.ToUInt16 (color.Blue * 65535));
             Layout.Attributes.Insert (attr);
 
-            return ret;
+            return base.OnDrawn (cr);
         }
 
         protected virtual void OnFilterChanged ()

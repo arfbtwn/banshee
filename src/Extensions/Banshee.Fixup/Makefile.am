@@ -21,5 +21,9 @@ RESOURCES =  \
 	Resources/ActiveUI.xml \
 	Resources/GlobalUI.xml
 
+if ENABLE_FIXUP
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

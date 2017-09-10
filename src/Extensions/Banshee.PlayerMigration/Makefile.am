@@ -11,5 +11,9 @@ SOURCES =  \
 
 RESOURCES = Banshee.PlayerMigration.addin.xml
 
+if ENABLE_PLAYERMIGRATION
 include $(top_srcdir)/build/build.mk
+else
+include $(top_srcdir)/build/build.dist.mk
+endif
 

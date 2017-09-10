@@ -1,4 +1,4 @@
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-Wall \
 	-ggdb3 \
@@ -34,7 +34,7 @@ libbanshee_la_SOURCES =  \
 
 if HAVE_CLUTTER
 libbanshee_la_SOURCES += clutter-gst-video-sink.c
-INCLUDES += -I$(srcdir)/shaders
+AM_CPPFLAGS += -I$(srcdir)/shaders
 else
 noinst_DATA = clutter-gst-video-sink.c
 endif

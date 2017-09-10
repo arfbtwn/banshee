@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<its:rules xmlns:its="http://www.w3.org/2005/11/its"
+           version="2.0">
+  <its:translateRule selector="/audio-profiles" translate="no"/>
+  <its:translateRule selector="//name" translate="yes"/>
+  <its:translateRule selector="//description" translate="yes"/>
+  <its:translateRule selector="//value" translate="yes"/>
+  <its:translateRule selector="//min-label" translate="yes"/>
+  <its:translateRule selector="//max-label" translate="yes"/>
+</its:rules>
