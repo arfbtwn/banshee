@@ -44,12 +44,15 @@
     </Reference>
     <Reference Include="Mono.Ssdp">
       <HintPath>..\..\..\bin\Mono.Ssdp.dll</HintPath>
+      <HintPath>/usr/lib/mono-upnp/Mono.Ssdp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Upnp">
       <HintPath>..\..\..\bin\Mono.Upnp.dll</HintPath>
+      <HintPath>/usr/lib/mono-upnp/Mono.Upnp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Upnp.Dcp.MediaServer1">
       <HintPath>..\..\..\bin\Mono.Upnp.Dcp.MediaServer1.dll</HintPath>
+      <HintPath>/usr/lib/mono-upnp/Mono.Upnp.Dcp.MediaServer1.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
   </ItemGroup>

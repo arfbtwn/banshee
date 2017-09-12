@@ -41,18 +41,13 @@
     <Compile Include="Banshee.YouTube.Gui\VideoStreamTile.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Google.GData.Client" Version="2.2.0.0" />
+    <PackageReference Include="Google.GData.Extensions" Version="2.2.0.0" />
+    <PackageReference Include="Google.GData.YouTube" Version="2.2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="4.0.5.0" />
     <Reference Include="System" />
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\bin\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.YouTube">
-      <HintPath>..\..\..\bin\Google.GData.YouTube.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.Extensions">
-      <HintPath>..\..\..\bin\Google.GData.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.Client">
-      <HintPath>..\..\..\bin\Google.GData.Client.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Posix">
       <HintPath>..\..\..\bin\Mono.Posix.dll</HintPath>

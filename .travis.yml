@@ -1,0 +1,24 @@
+dist: trusty
+language: csharp
+solution: Banshee.sln
+
+addons:
+  apt:
+    packages:
+      - libgtk3.0-cil
+      - libdbus2.0-cil
+      - libtaglib2.1-cil
+      - libmono-addins0.2-cil
+      - libdbus-glib2.0-cil
+      - libgudev3.0-cil
+      - libmono-zeroconf1.0-cil
+      - libgconf2.0-cil
+      - libboo2.0.9-cil
+      - libmono-upnp-cil
+env:
+  - BUILD_CONFIGURATION=Release
+  - BUILD_CONFIGURATION=Debug
+
+script:
+  - msbuild /t:restore
+  - msbuild /p:Configuration=$BUILD_CONFIGURATION Banshee.sln
