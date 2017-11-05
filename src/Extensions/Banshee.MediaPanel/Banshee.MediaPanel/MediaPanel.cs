@@ -30,20 +30,48 @@ using Mono.Unix;
 using Gtk;
 
 using Hyena;
+
 using Banshee.Base;
+using Banshee.Gui;
 using Banshee.ServiceStack;
 
 namespace Banshee.MediaPanel
 {
     public class MediaPanel : IDisposable
     {
+        class Window : Gtk.Window
+        {
+            readonly GtkElementsService _elements;
+
+            public Window (IntPtr ptr) : base(ptr) { }
+
+            public Window () : base("Bashee Media Panel")
+            {
+                _elements = ServiceManager.Get<GtkElementsService>();
+
+                WindowPosition = WindowPosition.Center;
+                DefaultWidth   = 1000;
+                DefaultHeight  = 500;
+            }
+
+            protected override bool OnDeleteEvent(Gdk.Event evnt)
+            {
+                if (_elements.PrimaryWindowClose?.Invoke() ?? false) {
+                    return true;
+                }
+
+                ServiceStack.Application.Shutdown ();
+                return true;
+            }
+        }
+
         public static MediaPanel Instance { get; private set; }
 
         private Window window_panel;
 
         public MediaPanelContents Contents { get; private set; }
 
-        public  MediaPanel ()
+        public MediaPanel ()
         {
             if (Instance != null) {
                 throw new InvalidOperationException ("Only one MediaPanel instance should exist");
@@ -51,7 +79,7 @@ namespace Banshee.MediaPanel
 
             Instance = this;
 
-            window_panel = new Gtk.Window ("Banshee Media Panel");
+            window_panel = new Window ();
         }
 
         public void Dispose ()
@@ -67,13 +95,7 @@ namespace Banshee.MediaPanel
 
             if (window_panel != null) {
                 window_panel.Add (Contents);
-                window_panel.SetDefaultSize (1000, 500);
-                window_panel.WindowPosition = WindowPosition.Center;
-                window_panel.Show ();
-                GLib.Timeout.Add (1000, () => {
-                    window_panel.Present ();
-                    return false;
-                });
+                window_panel.Present ();
             }
         }
 
