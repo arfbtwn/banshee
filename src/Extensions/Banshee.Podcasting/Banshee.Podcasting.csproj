@@ -113,8 +113,6 @@
     <Compile Include="Banshee.Podcasting.Data\PodcastTrackInfo.cs" />
     <Compile Include="Banshee.Podcasting.Gui\DownloadManager\DownloadManagerInterface.cs" />
     <Compile Include="Banshee.Podcasting.Gui\DownloadManager\DownloadUserJob.cs" />
-    <Compile Include="Banshee.Podcasting.Gui\Models\FilterableListModel.cs" />
-    <Compile Include="Banshee.Podcasting.Gui\Models\ListModel.cs" />
     <Compile Include="Banshee.Podcasting.Gui\PodcastManager\Dialog\PodcastFeedPropertiesDialog.cs" />
     <Compile Include="Banshee.Podcasting.Gui\PodcastManager\Dialog\PodcastPropertiesDialog.cs" />
     <Compile Include="Banshee.Podcasting.Gui\PodcastManager\Dialog\PodcastSubscribeDialog.cs" />
