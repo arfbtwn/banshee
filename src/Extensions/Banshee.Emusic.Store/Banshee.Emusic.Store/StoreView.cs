@@ -121,7 +121,8 @@ namespace Banshee.Emusic.Store
 
         private void CheckSignIn ()
         {
-            bool signed_in = OssiferSession.GetCookie ("EMUSIC_REMEMBER_ME_COOKIE", "www.emusic.com", "/") != null;
+            //bool signed_in = OssiferSession.GetCookie ("EMUSIC_REMEMBER_ME_COOKIE", "www.emusic.com", "/") != null;
+            bool signed_in = false;
 
             if (IsSignedIn != signed_in) {
                 IsSignedIn = signed_in;

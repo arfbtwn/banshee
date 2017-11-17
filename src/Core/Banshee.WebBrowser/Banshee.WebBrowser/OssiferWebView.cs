@@ -31,12 +31,21 @@ namespace Banshee.WebBrowser
 {
     public class OssiferWebView : Gtk.Widget
     {
-        private delegate OssiferNavigationResponse MimeTypePolicyDecisionRequestedCallback (IntPtr ossifer, IntPtr mimetype);
-        private delegate OssiferNavigationResponse NavigationPolicyDecisionRequestedCallback (IntPtr ossifer, IntPtr uri);
-        private delegate IntPtr DownloadRequestedCallback (IntPtr ossifer, IntPtr mimetype, IntPtr uri, IntPtr suggested_filename);
+        private delegate OssiferNavigationResponse MimeTypePolicyDecisionRequestedCallback (IntPtr ossifer,
+            IntPtr mimetype);
+
+        private delegate OssiferNavigationResponse NavigationPolicyDecisionRequestedCallback (IntPtr ossifer,
+            IntPtr uri);
+
+        private delegate IntPtr DownloadRequestedCallback (IntPtr ossifer, IntPtr mimetype, IntPtr uri,
+            IntPtr suggestedFilename);
+
         private delegate IntPtr ResourceRequestStartingCallback (IntPtr ossifer, IntPtr uri);
+
         private delegate void LoadStatusChangedCallback (IntPtr ossifer, OssiferLoadStatus status);
-        private delegate void DownloadStatusChangedCallback (IntPtr ossifer, OssiferDownloadStatus status, IntPtr mimetype, IntPtr destnation_uri);
+
+        private delegate void DownloadStatusChangedCallback (IntPtr ossifer, OssiferDownloadStatus status,
+            IntPtr mimetype, IntPtr destnationUri);
 
         [StructLayout (LayoutKind.Sequential)]
         private struct Callbacks
@@ -49,47 +58,46 @@ namespace Banshee.WebBrowser
             public DownloadStatusChangedCallback DownloadStatusChanged;
         }
 
-        private const string LIBOSSIFER = "ossifer";
+        private const string Libossifer = "ossifer";
 
-        private Callbacks callbacks;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly Callbacks callbacks;
 
         public event EventHandler LoadStatusChanged;
         public event Action<float> ZoomChanged;
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr ossifer_web_view_get_type ();
 
-        public static new GLib.GType GType {
-            get { return new GLib.GType (ossifer_web_view_get_type ()); }
-        }
+        public new static GLib.GType GType => new GLib.GType (ossifer_web_view_get_type ());
 
         protected OssiferWebView (IntPtr raw) : base (raw)
         {
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_set_callbacks (IntPtr ossifer, Callbacks callbacks);
 
         public OssiferWebView ()
         {
             OssiferSession.Initialize ();
-            CreateNativeObject (new string[0], new GLib.Value[0]);
 
-            callbacks = new Callbacks () {
+            callbacks = new Callbacks ()
+            {
                 MimeTypePolicyDecisionRequested =
-                    new MimeTypePolicyDecisionRequestedCallback (HandleMimeTypePolicyDecisionRequested),
+                    HandleMimeTypePolicyDecisionRequested,
                 NavigationPolicyDecisionRequested =
-                    new NavigationPolicyDecisionRequestedCallback (HandleNavigationPolicyDecisionRequested),
-                DownloadRequested = new DownloadRequestedCallback (HandleDownloadRequested),
-                ResourceRequestStarting = new ResourceRequestStartingCallback (HandleResourceRequestStarting),
-                LoadStatusChanged = new LoadStatusChangedCallback (HandleLoadStatusChanged),
-                DownloadStatusChanged = new DownloadStatusChangedCallback (HandleDownloadStatusChanged)
+                    HandleNavigationPolicyDecisionRequested,
+                DownloadRequested = HandleDownloadRequested,
+                ResourceRequestStarting = HandleResourceRequestStarting,
+                LoadStatusChanged = HandleLoadStatusChanged,
+                DownloadStatusChanged = HandleDownloadStatusChanged
             };
 
             ossifer_web_view_set_callbacks (Handle, callbacks);
         }
 
-#region Callback Implementations
+        #region Callback Implementations
 
         private OssiferNavigationResponse HandleMimeTypePolicyDecisionRequested (IntPtr ossifer, IntPtr mimetype)
         {
@@ -111,12 +119,12 @@ namespace Banshee.WebBrowser
             return OssiferNavigationResponse.Unhandled;
         }
 
-        private IntPtr HandleDownloadRequested (IntPtr ossifer, IntPtr mimetype, IntPtr uri, IntPtr suggested_filename)
+        private IntPtr HandleDownloadRequested (IntPtr ossifer, IntPtr mimetype, IntPtr uri, IntPtr suggestedFilename)
         {
             var destination_uri = OnDownloadRequested (
                 GLib.Marshaller.Utf8PtrToString (mimetype),
                 GLib.Marshaller.Utf8PtrToString (uri),
-                GLib.Marshaller.Utf8PtrToString (suggested_filename));
+                GLib.Marshaller.Utf8PtrToString (suggestedFilename));
             return destination_uri == null
                 ? IntPtr.Zero
                 : GLib.Marshaller.StringToPtrGStrdup (destination_uri);
@@ -127,48 +135,49 @@ namespace Banshee.WebBrowser
             return null;
         }
 
-        private IntPtr HandleResourceRequestStarting (IntPtr ossifer, IntPtr old_uri)
+        private IntPtr HandleResourceRequestStarting (IntPtr ossifer, IntPtr oldUri)
         {
-            string new_uri = OnResourceRequestStarting (GLib.Marshaller.Utf8PtrToString (old_uri));
+            string new_uri = OnResourceRequestStarting (GLib.Marshaller.Utf8PtrToString (oldUri));
             return new_uri == null
                 ? IntPtr.Zero
                 : GLib.Marshaller.StringToPtrGStrdup (new_uri);
         }
 
-        protected virtual string OnResourceRequestStarting (string old_uri)
+        protected virtual string OnResourceRequestStarting (string oldUri)
         {
             return null;
         }
 
         private void HandleLoadStatusChanged (IntPtr ossifer, OssiferLoadStatus status)
         {
+            LoadStatus = status;
             OnLoadStatusChanged (status);
         }
 
         protected virtual void OnLoadStatusChanged (OssiferLoadStatus status)
         {
             var handler = LoadStatusChanged;
-            if (handler != null) {
-                handler (this, EventArgs.Empty);
-            }
+            handler?.Invoke (this, EventArgs.Empty);
         }
 
-        private void HandleDownloadStatusChanged (IntPtr ossifer, OssiferDownloadStatus status, IntPtr mimetype, IntPtr destinationUri)
+        private void HandleDownloadStatusChanged (IntPtr ossifer, OssiferDownloadStatus status, IntPtr mimetype,
+            IntPtr destinationUri)
         {
             OnDownloadStatusChanged (status,
                 GLib.Marshaller.Utf8PtrToString (mimetype),
                 GLib.Marshaller.Utf8PtrToString (destinationUri));
         }
 
-        protected virtual void OnDownloadStatusChanged (OssiferDownloadStatus status, string mimetype, string destinationUri)
+        protected virtual void OnDownloadStatusChanged (OssiferDownloadStatus status, string mimetype,
+            string destinationUri)
         {
         }
 
-#endregion
+        #endregion
 
-#region Public Instance API
+        #region Public Instance API
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr ossifer_web_view_load_uri (IntPtr ossifer, IntPtr uri);
 
         public void LoadUri (string uri)
@@ -177,51 +186,42 @@ namespace Banshee.WebBrowser
             try {
                 uri_raw = GLib.Marshaller.StringToPtrGStrdup (uri);
                 ossifer_web_view_load_uri (Handle, uri_raw);
-            } finally {
+            }
+            finally {
                 GLib.Marshaller.Free (uri_raw);
             }
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void ossifer_web_view_load_string (IntPtr ossifer,
-            IntPtr content, IntPtr mimetype, IntPtr encoding, IntPtr base_uri);
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void ossifer_web_view_load_html (IntPtr ossifer, IntPtr content, IntPtr baseUri);
 
-        public void LoadString (string content, string mimetype, string encoding, string baseUri)
+        public void LoadHtml (string content, string baseUri)
         {
             var content_raw = IntPtr.Zero;
-            var mimetype_raw = IntPtr.Zero;
-            var encoding_raw = IntPtr.Zero;
             var base_uri_raw = IntPtr.Zero;
 
             try {
-                ossifer_web_view_load_string (Handle,
+                ossifer_web_view_load_html (Handle,
                     content_raw = GLib.Marshaller.StringToPtrGStrdup (content),
-                    mimetype_raw = GLib.Marshaller.StringToPtrGStrdup (mimetype),
-                    encoding_raw = GLib.Marshaller.StringToPtrGStrdup (encoding),
                     base_uri_raw = GLib.Marshaller.StringToPtrGStrdup (baseUri));
-            } finally {
+            }
+            finally {
                 GLib.Marshaller.Free (content_raw);
-                GLib.Marshaller.Free (mimetype_raw);
-                GLib.Marshaller.Free (encoding_raw);
                 GLib.Marshaller.Free (base_uri_raw);
             }
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool ossifer_web_view_can_go_forward (IntPtr ossifer);
 
-        public virtual bool CanGoForward {
-            get { return ossifer_web_view_can_go_forward (Handle); }
-        }
+        public virtual bool CanGoForward => ossifer_web_view_can_go_forward (Handle);
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool ossifer_web_view_can_go_back (IntPtr ossifer);
 
-        public virtual bool CanGoBack {
-            get { return ossifer_web_view_can_go_back (Handle); }
-        }
+        public virtual bool CanGoBack => ossifer_web_view_can_go_back (Handle);
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_go_forward (IntPtr ossifer);
 
         public virtual void GoForward ()
@@ -229,7 +229,7 @@ namespace Banshee.WebBrowser
             ossifer_web_view_go_forward (Handle);
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_go_back (IntPtr ossifer);
 
         public virtual void GoBack ()
@@ -237,44 +237,46 @@ namespace Banshee.WebBrowser
             ossifer_web_view_go_back (Handle);
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_set_zoom (IntPtr ossifer, float zoomLevel);
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern float ossifer_web_view_get_zoom (IntPtr ossifer);
 
         public float Zoom {
-            get { return ossifer_web_view_get_zoom (Handle); }
+            get => ossifer_web_view_get_zoom (Handle);
             set {
                 ossifer_web_view_set_zoom (Handle, value);
                 var handler = ZoomChanged;
-                if (handler != null) {
-                    handler (value);
-                }
+                handler?.Invoke (value);
             }
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_reload (IntPtr ossifer);
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_reload_bypass_cache (IntPtr ossifer);
 
-        public virtual void Reload (bool bypassCache)
+        public virtual void Reload (bool bypassCache = false)
         {
             if (bypassCache) {
                 ossifer_web_view_reload_bypass_cache (Handle);
-            } else {
+            }
+            else {
                 ossifer_web_view_reload (Handle);
             }
         }
 
-        public void Reload ()
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void ossifer_web_view_stop_loading (IntPtr ossifer);
+
+        public void StopLoading ()
         {
-            Reload (false);
+            ossifer_web_view_stop_loading (Handle);
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ossifer_web_view_execute_script (IntPtr ossifer, IntPtr script);
 
         public void ExecuteScript (string script)
@@ -282,40 +284,29 @@ namespace Banshee.WebBrowser
             var script_raw = IntPtr.Zero;
             try {
                 ossifer_web_view_execute_script (Handle, script_raw = GLib.Marshaller.StringToPtrGStrdup (script));
-            } finally {
+            }
+            finally {
                 GLib.Marshaller.Free (script_raw);
             }
         }
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr ossifer_web_view_get_uri (IntPtr ossifer);
 
-        public virtual string Uri {
-            get { return GLib.Marshaller.Utf8PtrToString (ossifer_web_view_get_uri (Handle)); }
-        }
+        public virtual string Uri => GLib.Marshaller.Utf8PtrToString (ossifer_web_view_get_uri (Handle));
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr ossifer_web_view_get_title (IntPtr ossifer);
 
-        public virtual string Title {
-            get { return GLib.Marshaller.Utf8PtrToString (ossifer_web_view_get_title (Handle)); }
-        }
+        public virtual string Title => GLib.Marshaller.Utf8PtrToString (ossifer_web_view_get_title (Handle));
 
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OssiferLoadStatus ossifer_web_view_get_load_status (IntPtr ossifer);
+        public virtual OssiferLoadStatus LoadStatus { get; private set; }
 
-        public virtual OssiferLoadStatus LoadStatus {
-            get { return ossifer_web_view_get_load_status (Handle); }
-        }
-
-        [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport (Libossifer, CallingConvention = CallingConvention.Cdecl)]
         private static extern OssiferSecurityLevel ossifer_web_view_get_security_level (IntPtr ossifer);
 
-        public virtual OssiferSecurityLevel SecurityLevel {
-            get { return ossifer_web_view_get_security_level (Handle); }
-        }
+        public virtual OssiferSecurityLevel SecurityLevel => ossifer_web_view_get_security_level (Handle);
 
-#endregion
-
+        #endregion
     }
 }

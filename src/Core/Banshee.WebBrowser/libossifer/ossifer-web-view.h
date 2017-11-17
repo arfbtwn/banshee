@@ -1,7 +1,7 @@
 #ifndef OSSIFER_WEB_VIEW_H
 #define OSSIFER_WEB_VIEW_H
 
-#include <webkit/webkit.h>
+#include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
 
@@ -22,6 +22,33 @@ typedef enum
     OSSIFER_SECURITY_IS_BROKEN,
     OSSIFER_SECURITY_IS_SECURE
 } OssiferSecurityLevel;
+
+typedef enum
+{
+    OSSIFER_DOWNLOAD_ERROR = -1,
+    OSSIFER_DOWNLOAD_CREATED = 0,
+    OSSIFER_DOWNLOAD_STARTED,
+    OSSIFER_DOWNLOAD_CANCELLED,
+    OSSIFER_DOWNLOAD_FINISHED
+} OssiferDownloadStatus;
+
+typedef enum
+{
+    OSSIFER_LOAD_UNKNOWN,
+    OSSIFER_LOAD_PROVISIONAL,
+    OSSIFER_LOAD_COMMITTED,
+    OSSIFER_LOAD_FINISHED,
+    OSSIFER_LOAD_FIRST_VISUALLY_NON_EMPTY_LAYOUT,
+    OSSIFER_LOAD_FAILED
+} OssiferLoadStatus;
+
+typedef enum
+{
+    OSSIFER_NAVIGATION_ACCEPT,
+    OSSIFER_NAVIGATION_IGNORE,
+    OSSIFER_NAVIGATION_DOWNLOAD,
+    OSSIFER_NAVIGATION_UNHANDLED = 1000
+} OssiferNavigationResponse;
 
 struct OssiferWebView {
     WebKitWebView parent;

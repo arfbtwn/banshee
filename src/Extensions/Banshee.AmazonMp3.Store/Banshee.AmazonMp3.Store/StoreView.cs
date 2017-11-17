@@ -174,8 +174,8 @@ namespace Banshee.AmazonMp3.Store
         {
             var signed_in = false;
             foreach (var domain in domains) {
-                signed_in |= OssiferSession.GetCookie ("at-main", ".amazon." + domain, "/") != null;
-                signed_in |= OssiferSession.GetCookie ("at-acbuk", ".amazon." + domain, "/") != null;
+                //signed_in |= OssiferSession.GetCookie ("at-main", ".amazon." + domain, "/") != null;
+                //signed_in |= OssiferSession.GetCookie ("at-acbuk", ".amazon." + domain, "/") != null;
             }
 
             if (IsSignedIn != signed_in) {

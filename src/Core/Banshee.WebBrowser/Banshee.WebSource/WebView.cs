@@ -26,64 +26,89 @@
 // THE SOFTWARE.
 
 using System;
-
-using Gtk;
-
-using Hyena;
-using Hyena.Downloader;
-
+using System.Runtime.InteropServices;
 using Banshee.Base;
-using Banshee.IO;
 using Banshee.WebBrowser;
+using Gdk;
+using GLib;
+using Hyena.Downloader;
+using EventArgs = System.EventArgs;
+using EventHandler = System.EventHandler;
+using Log = Hyena.Log;
 
 namespace Banshee.WebSource
 {
     public abstract class WebView : OssiferWebView
     {
-        protected string FixupJavascriptUrl { get; set; }
+        private const float ZoomStep = 0.05f;
         private string fixup_javascript;
         private bool fixup_javascript_fetched;
-
-        public bool IsReady { get; private set; }
-        public bool CanSearch { get; protected set; }
-
-        public event EventHandler Ready;
+        private double smooth_scroll_size;
 
         public WebView ()
         {
             CanSearch = false;
         }
 
-        const float ZOOM_STEP = 0.05f;
+        protected string FixupJavascriptUrl { get; set; }
+
+        public bool IsReady { get; private set; }
+        public bool CanSearch { get; protected set; }
+
+        public event EventHandler Ready;
 
         public void ZoomIn ()
         {
-            Zoom += ZOOM_STEP;
+            Zoom += ZoomStep;
         }
 
         public void ZoomOut ()
         {
-            Zoom -= ZOOM_STEP;
+            Zoom -= ZoomStep;
         }
 
-        protected override bool OnScrollEvent (Gdk.EventScroll scroll)
+        [DllImport ("libgdk-3-0.dll", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr gdk_event_get_scroll_deltas (IntPtr eventHandle, out double deltaX,
+            out double deltaY);
+
+        protected override bool OnScrollEvent (EventScroll scroll)
         {
-            if ((scroll.State & Gdk.ModifierType.ControlMask) != 0) {
-                Zoom += (scroll.Direction == Gdk.ScrollDirection.Up) ? ZOOM_STEP : -ZOOM_STEP;
+            if ((scroll.State & ModifierType.ControlMask) != 0) {
+                switch (scroll.Direction) {
+                    case ScrollDirection.Up:
+                        ZoomIn ();
+                        break;
+                    case ScrollDirection.Down:
+                        ZoomOut ();
+                        break;
+                    case (ScrollDirection) 4: //GDK_SCROLL_SMOOTH
+                        double delta_x;
+                        double delta_y;
+                        gdk_event_get_scroll_deltas (scroll.Handle, out delta_x, out delta_y);
+                        smooth_scroll_size += delta_y;
+
+                        if (smooth_scroll_size < -1) {
+                            ZoomIn ();
+                            smooth_scroll_size += 1;
+                        }
+                        else if (smooth_scroll_size > 1) {
+                            ZoomOut ();
+                            smooth_scroll_size -= 1;
+                        }
+                        break;
+                    default:
+                        return true;
+                }
                 return true;
             }
-
             return base.OnScrollEvent (scroll);
         }
 
         protected override void OnLoadStatusChanged (OssiferLoadStatus status)
         {
             if ((status == OssiferLoadStatus.FirstVisuallyNonEmptyLayout ||
-                status == OssiferLoadStatus.Finished) && Uri != "about:blank") {
-                if (fixup_javascript != null) {
-                    ExecuteScript (fixup_javascript);
-                }
-            }
+                 status == OssiferLoadStatus.Finished) &&
+                Uri != "about:blank") if (fixup_javascript != null) ExecuteScript (fixup_javascript);
 
             base.OnLoadStatusChanged (status);
         }
@@ -109,8 +134,7 @@ namespace Banshee.WebSource
         {
             // This is an HTML5 Canvas/JS spinner icon. It is awesome
             // and renders immediately, going away when the store loads.
-            LoadString (AssemblyResource.GetFileContents ("loading.html"),
-                "text/html", "UTF-8", null);
+            LoadHtml (AssemblyResource.GetFileContents ("loading.html"), null);
 
             // Here we download and save for later injection some JavaScript
             // to fix-up the Amazon pages. We don't store this locally since
@@ -119,17 +143,17 @@ namespace Banshee.WebSource
             // messages, since we do the streaming of previews natively.
             if (FixupJavascriptUrl != null && !fixup_javascript_fetched) {
                 fixup_javascript_fetched = true;
-                new Hyena.Downloader.HttpStringDownloader () {
+                new HttpStringDownloader
+                {
                     Uri = new Uri (FixupJavascriptUrl),
-                    Finished = (d) => {
-                        if (d.State.Success) {
-                            fixup_javascript = d.Content;
-                        }
+                    Finished = d => {
+                        if (d.State.Success) fixup_javascript = d.Content;
                         LoadHome ();
                     },
-                    AcceptContentTypes = new [] { "text/javascript" }
+                    AcceptContentTypes = new[] {"text/javascript"}
                 }.Start ();
-            } else {
+            }
+            else {
                 LoadHome ();
             }
         }
@@ -138,7 +162,7 @@ namespace Banshee.WebSource
         {
             // We defer this to another main loop iteration, otherwise
             // our load placeholder document will never be rendered.
-            GLib.Idle.Add (delegate {
+            Idle.Add (delegate {
                 GoHome ();
 
                 // Emit the Ready event once we are first allowed
@@ -147,9 +171,7 @@ namespace Banshee.WebSource
                 if (!IsReady) {
                     IsReady = true;
                     var handler = Ready;
-                    if (handler != null) {
-                        handler (this, EventArgs.Empty);
-                    }
+                    handler?.Invoke (this, EventArgs.Empty);
                 }
                 return false;
             });

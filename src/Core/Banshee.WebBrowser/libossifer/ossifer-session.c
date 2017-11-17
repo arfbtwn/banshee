@@ -1,7 +1,7 @@
 #include <config.h>
-#include <webkit/webkit.h>
+#include <webkit2/webkit2.h>
 
-typedef struct OssiferSession OssiferSession;
+/*typedef struct OssiferSession OssiferSession;
 
 typedef void (* OssiferSessionCookieJarChanged)
     (OssiferSession *session, SoupCookie *old_cookie, SoupCookie *new_cookie);
@@ -119,4 +119,4 @@ void
 ossifer_cookie_free (SoupCookie *cookie)
 {
     soup_cookie_free (cookie);
-}
+}*/

@@ -47,7 +47,7 @@ namespace Banshee.WebBrowser
 
         public static void Initialize ()
         {
-            if (handle != IntPtr.Zero) {
+            /*if (handle != IntPtr.Zero) {
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace Banshee.WebBrowser
                     cookie_jar_changed_callback);
             } finally {
                 GLib.Marshaller.Free (path_raw);
-            }
+            }*/
         }
 
         [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
@@ -74,12 +74,12 @@ namespace Banshee.WebBrowser
             var path_raw = IntPtr.Zero;
 
             try {
-                ossifer_session_set_cookie (
+                /*ossifer_session_set_cookie (
                     name_raw = GLib.Marshaller.StringToPtrGStrdup (name),
                     value_raw = GLib.Marshaller.StringToPtrGStrdup (value),
                     domain_raw = GLib.Marshaller.StringToPtrGStrdup (domain),
                     path_raw = GLib.Marshaller.StringToPtrGStrdup (path),
-                    (int)Math.Round (maxAge.TotalSeconds));
+                    (int)Math.Round (maxAge.TotalSeconds));*/
             } finally {
                 GLib.Marshaller.Free (name_raw);
                 GLib.Marshaller.Free (value_raw);
@@ -111,7 +111,8 @@ namespace Banshee.WebBrowser
 
         public static OssiferCookie GetCookie (string name, string domain, string path)
         {
-            var name_raw = IntPtr.Zero;
+            return null;
+/*            var name_raw = IntPtr.Zero;
             var domain_raw = IntPtr.Zero;
             var path_raw = IntPtr.Zero;
 
@@ -130,7 +131,7 @@ namespace Banshee.WebBrowser
                 GLib.Marshaller.Free (name_raw);
                 GLib.Marshaller.Free (domain_raw);
                 GLib.Marshaller.Free (path_raw);
-            }
+            }*/
         }
 
         [DllImport (LIBOSSIFER, CallingConvention = CallingConvention.Cdecl)]
@@ -138,7 +139,8 @@ namespace Banshee.WebBrowser
 
         public static bool DeleteCookie (string name, string domain, string path)
         {
-            var name_raw = IntPtr.Zero;
+            return true;
+/*            var name_raw = IntPtr.Zero;
             var domain_raw = IntPtr.Zero;
             var path_raw = IntPtr.Zero;
 
@@ -151,7 +153,7 @@ namespace Banshee.WebBrowser
                 GLib.Marshaller.Free (name_raw);
                 GLib.Marshaller.Free (domain_raw);
                 GLib.Marshaller.Free (path_raw);
-            }
+            }*/
         }
     }
 }
