@@ -175,8 +175,8 @@ namespace Banshee.Gui.Widgets
                     cr.SetSource (mask);
                     cr.Fill ();
                 }
-
             }
+            target.Dispose ();
             return surface;
         }
 
