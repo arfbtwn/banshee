@@ -1,6 +1,5 @@
 SUBDIRS = pkg-config m4
 
-GCONF_SCHEMA_EXTRACTOR_ASSEMBLY = gconf-schema-extractor.exe
 TRANSLATOR_EXTRACTOR_ASSEMBLY = translator-extractor.exe
 ADDIN_XML_STRING_EXTRACTOR_ASSEMBLY = addin-xml-string-extractor.exe
 GOBJECT_INTPTR_CTOR_VERIFIER_ASSEMBLY = gobject-intptr-ctor-verifier.exe
@@ -10,13 +9,6 @@ ALL_TARGETS = \
 	$(DLL_MAP_VERIFIER_ASSEMBLY) \
 	$(ADDIN_XML_STRING_EXTRACTOR_ASSEMBLY) \
 	$(GOBJECT_INTPTR_CTOR_VERIFIER_ASSEMBLY)
-
-if GCONF_SCHEMAS_INSTALL
-bansheedir = $(pkglibdir)
-banshee_SCRIPTS = $(GCONF_SCHEMA_EXTRACTOR_ASSEMBLY)
-$(GCONF_SCHEMA_EXTRACTOR_ASSEMBLY): GConfSchemaExtractor.cs
-	$(MCS) -out:$@ $<
-endif
 
 $(TRANSLATOR_EXTRACTOR_ASSEMBLY): TranslatorExtractor.cs
 	if [ "x$(top_srcdir)" = "x$(top_builddir)" ]; then \
@@ -33,13 +25,11 @@ $(GOBJECT_INTPTR_CTOR_VERIFIER_ASSEMBLY): GObjectIntPtrCtorVerifier.cs
 EXTRA_DIST = \
 	icon-theme-installer \
 	private-icon-theme-installer \
-	GConfSchemaExtractor.cs \
 	TranslatorExtractor.cs \
 	DllMapVerifier.cs \
 	AddinXmlStringExtractor.cs \
 	GObjectIntPtrCtorVerifier.cs \
 	dll-map-makefile-verifier \
-	gconf-schema-rules \
 	gnome-doc-utils.make
 
 CLEANFILES = *.exe *.mdb

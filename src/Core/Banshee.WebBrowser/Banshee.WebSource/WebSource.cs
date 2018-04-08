@@ -81,7 +81,7 @@ namespace Banshee.WebSource
             if (source_contents == null) {
                 var shell = GetWidget ();
 
-                // float isn't supported by gconf apparently
+                // float isn't supported by GSettings apparently
                 var zoom_conf = CreateSchema<double> ("webview_zoom", 1f, null, null);
                 shell.View.Zoom = (float)zoom_conf.Get ();
                 shell.View.ZoomChanged += z => zoom_conf.Set (z);

@@ -49,7 +49,6 @@ namespace Banshee.Library
     public abstract class LibrarySource : PrimarySource
     {
         // Deprecated, don't use in new code
-        // TODO: remove before GConf->GSettings migration?
         internal static readonly Banshee.Configuration.SchemaEntry<string> OldLocationSchema = new Banshee.Configuration.SchemaEntry<string> ("library", "base_location", null, null, null);
         internal static readonly Banshee.Configuration.SchemaEntry<bool> OldImportSetting = new Banshee.Configuration.SchemaEntry<bool> ("library", "copy_on_import", false, null, null);
         internal static readonly Banshee.Configuration.SchemaEntry<bool> OldRenameSetting = new Banshee.Configuration.SchemaEntry<bool> ("library", "move_on_info_save", false, null, null);

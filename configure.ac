@@ -33,7 +33,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([build/m4])
 AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/shamrock -I build/m4/banshee -I build/m4/shave \${ACLOCAL_FLAGS}"])
 
-IT_PROG_INTLTOOL([0.35.0])
+IT_PROG_INTLTOOL([0.50.1])
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 
@@ -116,11 +116,9 @@ PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.8.1)
 dnl GNOME (optional)
 AC_ARG_ENABLE(gnome, AC_HELP_STRING([--disable-gnome], [Disable GNOME support]), , enable_gnome="yes")
 if test "x$enable_gnome" = "xyes"; then
-	BANSHEE_CHECK_GNOME_SHARP
-	BANSHEE_CHECK_GCONF
+	GLIB_GSETTINGS
 	AM_CONDITIONAL(ENABLE_GNOME, true)
 else
-	AM_CONDITIONAL(GCONF_SCHEMAS_INSTALL, false)
 	AM_CONDITIONAL(ENABLE_GNOME, false)
 fi
 
@@ -200,6 +198,7 @@ build/pkg-config/Makefile
 data/Makefile
 data/org.bansheeproject.Banshee.service
 data/org.bansheeproject.CollectionIndexer.service
+data/org.gnome.banshee.gschema.xml
 data/audio-profiles/Makefile
 data/desktop-files/Makefile
 data/desktop-files/common.desktop

@@ -21,15 +21,22 @@ appdatadir = $(datadir)/appdata
 appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 appdata_in_files = banshee.appdata.xml.in
 
+gsettingsschema_in_files =  org.gnome.banshee.gschema.xml.in
+gsettings_SCHEMAS = $(gsettingsschema_in_files:.xml.in=.xml)
+
+@GSETTINGS_RULES@
+
 all: addin-xml-strings.cs
 
 EXTRA_DIST = \
 	$(dbusservice_in_files) \
 	addin-xml-strings.cs \
-	$(appdata_in_files)
+	$(appdata_in_files) \
+	$(gsettingsschema_in_files)
 
 CLEANFILES = \
-	$(appdata_DATA)
+	$(appdata_DATA) \
+	$(gsettings_SCHEMAS)
 
 DISTCLEANFILES = \
 	$(dbusservice_DATA)

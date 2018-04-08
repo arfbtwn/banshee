@@ -170,8 +170,7 @@ namespace Banshee.ServiceStack
         {
             if (!paths_initialized) {
                 // We changed banshee-1 to banshee everywhere except the
-                // ~/.config/banshee-1/ and ~/.cache/banshee-1 directories, and 
-                // for gconf
+                // ~/.config/banshee-1/ and ~/.cache/banshee-1 directories
                 Paths.UserApplicationName = "banshee-1";
                 Paths.ApplicationName = InternalName;
                 paths_initialized = true;

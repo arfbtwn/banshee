@@ -3,10 +3,6 @@ TARGET = library
 ASSEMBLY_BUILD_FLAGS = -unsafe
 LINK = $(REF_BANSHEE_THICKCLIENT)
 
-if ENABLE_GNOME
-BUILD_DEFINES = "-define:GNOME"
-endif
-
 SOURCES =  \
 	Banshee.Addins.Gui/AddinView.cs \
 	Banshee.CairoGlyphs/BansheeLineLogo.cs \

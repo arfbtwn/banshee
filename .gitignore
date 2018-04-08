@@ -79,6 +79,9 @@ data/desktop-files/*.desktop
 data/audio-profiles/*.xml
 data/banshee.appdata.xml
 
+data/org.gnome.banshee.gschema.valid
+data/org.gnome.banshee.gschema.xml
+
 # JetBrains IDEs
 **/.idea
 *.user

@@ -990,16 +990,13 @@ namespace Banshee.PlayQueue
             "Clear the play queue when quitting"
         );
 
-        // TODO: By 1.8 next two schemas can be removed. They are kept only to ease
-        // the migration from GConfConfigurationClient to DatabaseConfigurationClient.
-
+        // The next 2 schemas are only used with DatabaseConfigurationClient
         private static readonly SchemaEntry<int> CurrentTrackSchema = new SchemaEntry<int> (
             "plugins.play_queue", "current_track",
             0,
             "Current Track",
             "Current track in the Play Queue"
         );
-
         private static readonly SchemaEntry<int> CurrentOffsetSchema = new SchemaEntry<int> (
             "plugins.play_queue", "current_offset",
             0,

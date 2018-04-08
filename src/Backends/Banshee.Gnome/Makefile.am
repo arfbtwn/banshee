@@ -6,10 +6,10 @@ INSTALL_DIR = $(BACKENDS_INSTALL_DIR)
 SOURCES =  \
 	Banshee.GnomeBackend/Brasero.cs \
 	Banshee.GnomeBackend/DiscDuplicator.cs \
-	Banshee.GnomeBackend/GConfConfigurationClient.cs \
-	Banshee.GnomeBackend/GConfProxy.cs \
 	Banshee.GnomeBackend/GnomeScreensaverManager.cs \
-	Banshee.GnomeBackend/GnomeService.cs
+	Banshee.GnomeBackend/GnomeService.cs \
+	Banshee.GnomeBackend/GSettingsConfigurationClient.cs \
+	Banshee.GnomeBackend/ProxyConfiguration.cs
 
 RESOURCES =  \
 	Banshee.Gnome.addin.xml \

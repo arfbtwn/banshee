@@ -2,6 +2,7 @@
 # Please keep this file in alphabetical order; run ./sort-potfiles
 # after adding files here.
 [encoding: UTF-8]
+[type: gettext/gsettings]data/org.gnome.banshee.gschema.xml.in
 data/addin-xml-strings.cs
 data/audio-profiles/aac-novell.xml.in
 data/audio-profiles/base.xml.in
@@ -14,6 +15,9 @@ data/audio-profiles/wav.xml.in
 data/audio-profiles/wma.xml.in
 data/banshee.appdata.xml.in
 data/desktop-files/common.desktop.in
+libbanshee/banshee-bpmdetector.c
+libbanshee/banshee-ripper.c
+libbanshee/banshee-transcoder.c
 src/Backends/Banshee.Gnome/Banshee.GnomeBackend/Brasero.cs
 src/Backends/Banshee.Gnome/Banshee.GnomeBackend/GnomeScreensaverManager.cs
 src/Backends/Banshee.GStreamer/Banshee.GStreamer/AudioCdRipper.cs

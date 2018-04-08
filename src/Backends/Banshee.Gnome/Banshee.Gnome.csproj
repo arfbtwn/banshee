@@ -66,9 +66,6 @@
       <Package>gtk-sharp-3.0</Package>
       <HintPath>/usr/lib/mono/gtk-sharp-3.0/gtk-sharp.dll</HintPath>
     </Reference>
-    <Reference Include="gconf-sharp">
-      <Package>gconf-sharp-2.0</Package>
-    </Reference>
     <Reference Include="Mono.Posix">
       <HintPath>/usr/lib/mono/4.5/Mono.Posix.dll</HintPath>
     </Reference>
@@ -82,12 +79,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Banshee.GnomeBackend\GConfConfigurationClient.cs" />
     <Compile Include="Banshee.GnomeBackend\GnomeService.cs" />
     <Compile Include="Banshee.GnomeBackend\Brasero.cs" />
     <Compile Include="Banshee.GnomeBackend\DiscDuplicator.cs" />
     <Compile Include="Banshee.GnomeBackend\GnomeScreensaverManager.cs" />
-    <Compile Include="Banshee.GnomeBackend\GConfProxy.cs" />
+    <Compile Include="Banshee.GnomeBackend\GSettingsConfigurationClient.cs" />
+    <Compile Include="Banshee.GnomeBackend\ProxyConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Banshee.Gnome.addin.xml">

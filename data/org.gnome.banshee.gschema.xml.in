@@ -1,0 +1,725 @@
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+  <schema id="org.gnome.banshee.audio_profiles">
+    <key name="active-profile" type="s">
+      <default>''</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.browser">
+    <key name="show-artist-filter" type="b">
+      <default>true</default>
+      <summary>Artist Filter Visibility</summary>
+      <description>Whether or not to show the Artist filter</description>
+    </key>
+    <key name="artist-filter-type" type="s">
+      <default>'artist'</default>
+      <summary>Artist/AlbumArtist Filter Type</summary>
+      <description>Whether to show all artists or just album artists in the artist filter; either 'artist' or 'albumartist'</description>
+    </key>
+    <key name="show-genre-filter" type="b">
+      <default>false</default>
+      <summary>Genre Filter Visibility</summary>
+      <description>Whether or not to show the Genre filter</description>
+    </key>
+    <key name="show-year-filter" type="b">
+      <default>false</default>
+      <summary>Year Filter Visibility</summary>
+      <description>Whether or not to show the Year filter</description>
+    </key>
+    <key name="visible" type="b">
+      <default>true</default>
+      <summary>Artist/Album Browser Visibility</summary>
+      <description>Whether or not to show the Artist/Album browser</description>
+    </key>
+    <key name="position" type="s">
+      <default>'top'</default>
+      <summary>Artist/Album Browser Position</summary>
+      <description>The position of the Artist/Album browser; either 'top' or 'left'</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.core">
+    <key name="io-provider" type="s">
+      <default>'Banshee.IO.Gio.Provider'</default>
+      <summary>Set the IO provider backend in Banshee</summary>
+      <description>Can be either "Banshee.IO.SystemIO.Provider" (.NET System.IO), "Banshee.IO.Gio.Provider" (GIO), or "Banshee.IO.Unix.Provider" (Native Unix/POSIX), or takes effect on Banshee start (restart necessary)</description>
+    </key>
+    <key name="make-default" type="b">
+      <default>true</default>
+      <summary>Whether to ensure Banshee is the default media player every time it starts</summary>
+      <description></description>
+    </key>
+    <key name="remember-make-default" type="b">
+      <default>false</default>
+      <summary>Whether to remember whether to ensure Banshee is the default media player every time it starts</summary>
+      <description></description>
+    </key>
+    <key name="ever-asked-make-default" type="b">
+      <default>false</default>
+      <summary>Whether the user has ever responded to whether they'd like to make Banshee the default player</summary>
+      <description></description>
+    </key>
+    <key name="send-anonymous-usage-data" type="b">
+      <default>false</default>
+      <summary>Improve Banshee by sending anonymous usage data</summary>
+      <description></description>
+    </key>
+    <key name="disable-internet-access" type="b">
+      <default>false</default>
+      <summary>Disable internet access</summary>
+      <description>Do not allow components to have internet access within Banshee</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.import">
+    <key name="show-initial-import-dialog" type="b">
+      <default>true</default>
+      <summary>Show the Initial Import Dialog</summary>
+      <description>Show the Initial Import Dialog when the Banshee library is empty</description>
+    </key>
+    <key name="audio-cd-error-correction" type="b">
+      <default>false</default>
+      <summary>Enable error correction</summary>
+      <description>When importing an audio CD, enable error correction (paranoia mode)</description>
+    </key>
+    <key name="auto-rip-cds" type="b">
+      <default>false</default>
+      <summary>Enable audio CD auto ripping</summary>
+      <description>When an audio CD is inserted, automatically begin ripping it.</description>
+    </key>
+    <key name="eject-after-ripped" type="b">
+      <default>false</default>
+      <summary>Eject audio CD after ripped</summary>
+      <description>After an audio CD has been ripped, automatically eject it.</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.interface">
+    <key name="show-context-pane" type="b">
+      <default>false</default>
+      <summary>Show context pane</summary>
+      <description>Show context pane for the currently playing track</description>
+    </key>
+    <key name="last-context-page" type="s">
+      <default>''</default>
+      <summary>The id of the last context page</summary>
+      <description>The string id of the last context page, which will be defaulted to when Banshee starts</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.interface.panes.albumartist.browser.top">
+    <key name="position" type="i">
+      <default>375</default>
+      <summary>Artist/Album Browser Container Top Position</summary>
+      <description>The position of the Artist/Album browser pane container, when placed at the top</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.interface.panes.albumartist.browser.left">
+    <key name="position" type="i">
+      <default>275</default>
+      <summary>Artist/Album Browser Container Left Position</summary>
+      <description>The position of the Artist/Album browser pane container, when placed on the left</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.interface.panes.filtered_list_source_contents.innerpane.position">
+    <key name="top" type="i">
+      <default>180</default>
+      <summary>Position for inner pane inside browser container at the top</summary>
+      <description>Position for inner pane inside browser container (albumartist, podcast, iradio...) to determine its height</description>
+    </key>
+    <key name="left" type="i">
+      <default>350</default>
+      <summary>Position for inner pane inside browser container on the left</summary>
+      <description>Position for inner pane inside browser container (albumartist, podcast, iradio...) to determine its width</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.interface.panes.iradio.browser.left">
+    <key name="position" type="i">
+      <default>275</default>
+      <summary>Internet Radio Browser Pane Container Position</summary>
+      <description>The position of the internet radio browser pane container</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.interface.panes.podcast.browser.left">
+    <key name="position" type="i">
+      <default>275</default>
+      <summary>Podcast Browser Pane Container Position</summary>
+      <description>The position of the podcast browser pane container</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.library">
+    <key name="folder-pattern" type="s">
+      <default>'%album_artist%%path_sep%%album%'</default>
+      <summary>Library Folder Pattern</summary>
+      <description>Format for creating a track folder inside the library. Do not create an absolute path. Location here is relative to the Banshee music directory. See LibraryLocation. Legal tokens: %album_artist%, %track_artist%, %album%, %genre%, %title%, %track_number%, %track_count%, %track_number_nz% (No prefixed zero), %track_count_nz% (No prefixed zero), %album_artist_initial%,%path_sep% (portable directory separator (/)), %artist% (deprecated, use %album_artist%).</description>
+    </key>
+    <key name="file-pattern" type="s">
+      <default>'{%track_number%. }%title%'</default>
+      <summary>Library File Pattern</summary>
+      <description>Format for creating a track filename inside the library. Do not use path tokens/characters here. See LibraryFolderPattern. Legal tokens: %album_artist%, %track_artist%, %album%, %genre%, %title%, %track_number%, %track_count%, %track_number_nz% (No prefixed zero), %track_count_nz% (No prefixed zero), %album_artist_initial%, %artist% (deprecated, use %album_artist%).</description>
+    </key>
+    <key name="write-metadata" type="b">
+      <default>false</default>
+      <summary>Sync metadata between library and supported files</summary>
+      <description>If enabled, metadata will be synced between the library and media files.</description>
+    </key>
+    <key name="write-rating" type="b">
+      <default>false</default>
+      <summary>Sync ratings between library and supported files</summary>
+      <description>If enabled, rating metadata will be synced between the library and audio files.</description>
+    </key>
+    <key name="write-count" type="b">
+      <default>false</default>
+      <summary>Sync play counts between library and supported files</summary>
+      <description>If enabled, playcount metadata will be synced between the library and audio files.</description>
+    </key>
+    <key name="sort-albums-by-year" type="b">
+      <default>false</default>
+      <summary>Sort tracks by album year</summary>
+      <description>If set the tracks will be sorted by album year instead of by album name</description>
+    </key>
+    <key name="base-location" type="s">
+      <default>''</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="copy-on-import" type="b">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="move-on-info-save" type="b">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.minimode">
+    <key name="width" type="i">
+      <default>0</default>
+      <summary>Window Width</summary>
+      <description>Width of the main interface window.</description>
+    </key>
+    <key name="height" type="i">
+      <default>0</default>
+      <summary>Window Height</summary>
+      <description>Height of the main interface window.</description>
+    </key>
+    <key name="x-pos" type="i">
+      <default>0</default>
+      <summary>Window Position X</summary>
+      <description>Pixel position of Main Player Window on the X Axis</description>
+    </key>
+    <key name="y-pos" type="i">
+      <default>0</default>
+      <summary>Window Position Y</summary>
+      <description>Pixel position of Main Player Window on the Y Axis</description>
+    </key>
+    <key name="maximized" type="b">
+      <default>false</default>
+      <summary>Window Maximized</summary>
+      <description>True if main window is to be maximized, false if it is not.</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.muinshee">
+    <key name="width" type="i">
+      <default>-1</default>
+      <summary>Window Width</summary>
+      <description>Width of the main interface window.</description>
+    </key>
+    <key name="height" type="i">
+      <default>450</default>
+      <summary>Window Height</summary>
+      <description>Height of the main interface window.</description>
+    </key>
+    <key name="x-pos" type="i">
+      <default>0</default>
+      <summary>Window Position X</summary>
+      <description>Pixel position of Main Player Window on the X Axis</description>
+    </key>
+    <key name="y-pos" type="i">
+      <default>0</default>
+      <summary>Window Position Y</summary>
+      <description>Pixel position of Main Player Window on the Y Axis</description>
+    </key>
+    <key name="maximized" type="b">
+      <default>false</default>
+      <summary>Window Maximized</summary>
+      <description>True if main window is to be maximized, false if it is not.</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.muinshee.album">
+    <key name="width" type="i">
+      <default>500</default>
+      <summary>Window Width</summary>
+      <description>Width of the main interface window.</description>
+    </key>
+    <key name="height" type="i">
+      <default>475</default>
+      <summary>Window Height</summary>
+      <description>Height of the main interface window.</description>
+    </key>
+    <key name="x-pos" type="i">
+      <default>0</default>
+      <summary>Window Position X</summary>
+      <description>Pixel position of Main Player Window on the X Axis</description>
+    </key>
+    <key name="y-pos" type="i">
+      <default>0</default>
+      <summary>Window Position Y</summary>
+      <description>Pixel position of Main Player Window on the Y Axis</description>
+    </key>
+    <key name="maximized" type="b">
+      <default>false</default>
+      <summary>Window Maximized</summary>
+      <description>True if main window is to be maximized, false if it is not.</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.muinshee.song">
+    <key name="width" type="i">
+      <default>500</default>
+      <summary>Window Width</summary>
+      <description>Width of the main interface window.</description>
+    </key>
+    <key name="height" type="i">
+      <default>475</default>
+      <summary>Window Height</summary>
+      <description>Height of the main interface window.</description>
+    </key>
+    <key name="x-pos" type="i">
+      <default>0</default>
+      <summary>Window Position X</summary>
+      <description>Pixel position of Main Player Window on the X Axis</description>
+    </key>
+    <key name="y-pos" type="i">
+      <default>0</default>
+      <summary>Window Position Y</summary>
+      <description>Pixel position of Main Player Window on the Y Axis</description>
+    </key>
+    <key name="maximized" type="b">
+      <default>false</default>
+      <summary>Window Maximized</summary>
+      <description>True if main window is to be maximized, false if it is not.</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.nereid.track_view_columns">
+    <key name="order" type="i">
+      <default>-1</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="visible" type="b">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="width" type="d">
+      <default>1</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <!-- The next 2 key should not be here, they are for overall sorting, not for a column -->
+    <key name="column" type="s">
+      <default>""</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="direction" type="i">
+      <default>0</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.playback">
+    <key name="repeat-mode" type="s">
+      <default>'none'</default>
+      <summary>Repeat playback</summary>
+      <description>Repeat mode (repeat_none, repeat_all, repeat_single)</description>
+    </key>
+    <key name="shuffle-mode" type="s">
+      <default>'off'</default>
+      <summary>Shuffle playback</summary>
+      <description>Shuffle mode (shuffle_off, shuffle_song, shuffle_artist, shuffle_album, shuffle_rating, shuffle_score)</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.player_engine">
+    <key name="replay-gain-enabled" type="b">
+      <default>false</default>
+      <summary>Enable ReplayGain</summary>
+      <description>If ReplayGain data is present on tracks when playing, allow volume scaling</description>
+    </key>
+    <key name="gapless-playback-enabled" type="b">
+      <default>true</default>
+      <summary>Enable gapless playback</summary>
+      <description>Eliminate the small playback gap on track change. Useful for concept albums and classical music</description>
+    </key>
+    <key name="equalizer-enabled" type="b">
+      <default>false</default>
+      <summary>Equalizer status</summary>
+      <description>Whether or not the equalizer is set to be enabled.</description>
+    </key>
+    <key name="equalizer-preset" type="s">
+      <default>'Rock'</default>
+      <summary>Equalizer preset</summary>
+      <description>Default preset to load into equalizer.</description>
+    </key>
+    <key name="volume" type="i">
+      <default>80</default>
+      <summary>Volume</summary>
+      <description>Volume of playback relative to mixer output</description>
+    </key>
+    <key name="backend" type="s">
+      <default>'helix-remote'</default>
+      <summary>Backend</summary>
+      <description>Name of media playback engine backend</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.player_window">
+    <key name="default-export-format" type="s">
+      <default>''</default>
+      <summary>Export Format</summary>
+      <description>The default playlist export format</description>
+    </key>
+    <key name="disable-album-grid" type="b">
+      <default>false</default>
+      <summary>Disable album grid</summary>
+      <description>Disable album grid and show the classic layout instead</description>
+    </key>
+    <key name="last-file-chooser-uri" type="s">
+      <default>''</default>
+      <summary>URI</summary>
+      <description>URI of last file folder</description>
+    </key>
+    <key name="open-location-history" type="as">
+      <default>['']</default>
+      <summary>URI List</summary>
+      <description>List of URIs in the history drop-down for the open location dialog</description>
+    </key>
+    <key name="source-view-row-height" type="i">
+      <default>22</default>
+      <summary>The height of each source row in the SourceView.  22 is the default.</summary>
+      <description></description>
+    </key>
+    <key name="source-view-row-padding" type="i">
+      <default>5</default>
+      <summary>The padding between sources in the SourceView.  5 is the default.</summary>
+      <description></description>
+    </key>
+    <key name="width" type="i">
+      <default>1024</default>
+      <summary>Window Width</summary>
+      <description>Width of the main interface window.</description>
+    </key>
+    <key name="height" type="i">
+      <default>700</default>
+      <summary>Window Height</summary>
+      <description>Height of the main interface window.</description>
+    </key>
+    <key name="x-pos" type="i">
+      <default>0</default>
+      <summary>Window Position X</summary>
+      <description>Pixel position of Main Player Window on the X Axis</description>
+    </key>
+    <key name="y-pos" type="i">
+      <default>0</default>
+      <summary>Window Position Y</summary>
+      <description>Pixel position of Main Player Window on the Y Axis</description>
+    </key>
+    <key name="maximized" type="b">
+      <default>false</default>
+      <summary>Window Maximized</summary>
+      <description>True if main window is to be maximized, false if it is not.</description>
+    </key>
+    <key name="source-view-width" type="i">
+      <default>175</default>
+      <summary>Source View Width</summary>
+      <description>Width of Source View Column.</description>
+    </key>
+    <key name="show-cover-art" type="b">
+      <default>false</default>
+      <summary>Show cover art</summary>
+      <description>Show cover art below source view if available</description>
+    </key>
+    <key name="show-seek-slider-resizer" type="b">
+      <default>true</default>
+      <summary>Show seek slider resize grip</summary>
+      <description></description>
+    </key>
+    <key name="seek-slider-width" type="i">
+      <default>175</default>
+      <summary>Width of seek slider in px</summary>
+      <description></description>
+    </key>
+    <key name="search-entry-width" type="i">
+      <default>200</default>
+      <summary>Width of search entry element in px</summary>
+      <description></description>
+    </key>
+    <key name="artist-list-view-type" type="s">
+      <default>'Banshee.Collection.Gui.ColumnCellArtistText'</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.amazonmp3store">
+    <key name="country" type="s">
+      <default>'geo'</default>
+      <summary>Which store front to use ("geo" for auto-detect, US, UK, FR, DE, or JP</summary>
+      <description></description>
+    </key>
+    <key name="persist-login" type="b">
+      <default>true</default>
+      <summary>Persist the Amazon MP3 store account login across sessions (via cookies)</summary>
+      <description></description>
+    </key>
+    <key name="redirect-url" type="s">
+      <default>'http://integrated-services.banshee.fm/amz/redirect.do/'</default>
+      <summary>The URL of the redirect server to use for the AmazonMP3 store.</summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.bpm">
+    <key name="auto-enabled" type="b">
+      <default>false</default>
+      <summary>Automatically detect BPM on imported music</summary>
+      <description>Automatically detect BPM on imported music</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.cover_art">
+    <key name="enabled" type="b">
+      <default>true</default>
+      <summary>Plugin enabled</summary>
+      <description>Cover art plugin enabled</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.daap">
+    <key name="expanded" type="b">
+      <default>true</default>
+      <summary>Shared Music expanded</summary>
+      <description>Shared Music expanded</description>
+    </key>
+    <key name="open-remote-server-history" type="as">
+      <default>['']</default>
+      <summary>URI List</summary>
+      <description>List of URIs in the history drop-down for the open remote server dialog</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.mtp">
+    <key name="never-sync-albumart" type="b">
+      <default>false</default>
+      <summary>Album art disabled</summary>
+      <description>Regardless of device's capabilities, do not sync album art</description>
+    </key>
+    <key name="albumart-max-width" type="i">
+      <default>170</default>
+      <summary>Album art max width</summary>
+      <description>The maximum width to allow for album art.</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.file_system_queue">
+    <key name="clear-on-quit" type="b">
+      <default>false</default>
+      <summary>Clear on Quit</summary>
+      <description>Clear the file system queue when quitting</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.internetarchive">
+    <key name="audio-types" type="s">
+      <default>'Audio, VBR Mp3, Ogg Vorbis, 128Kbps MP3,  64Kbps MP3, Flac, VBR ZIP, 64Kbps MP3 ZIP'</default>
+      <summary>Ordered list of preferred mediatypes for audio items</summary>
+      <description></description>
+    </key>
+    <key name="video-types" type="s">
+      <default>'Ogg Video, 512Kb MPEG4, MPEG2, h.264 MPEG4, DivX, Quicktime, MPEG1'</default>
+      <summary>Ordered list of preferred mediatypes for video items</summary>
+      <description></description>
+    </key>
+    <key name="text-types" type="s">
+      <default>'Text PDF, Standard LuraTech PDF, Grayscale LuraTech PDF, Image Container PDF, ZIP, Text, Hypertext'</default>
+      <summary>Ordered list of preferred mediatypes for text items</summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.audioscrobbler">
+    <key name="api-url" type="s">
+      <default>''</default>
+      <summary>AudioScrobbler API URL</summary>
+      <description>URL for the AudioScrobbler API (supports turtle.libre.fm, for instance)</description>
+    </key>
+    <key name="engine-enabled" type="b">
+      <default>false</default>
+      <summary>Engine enabled</summary>
+      <description>Audioscrobbler reporting engine enabled</description>
+    </key>
+    <key name="device-engine-enabled" type="b">
+      <default>false</default>
+      <summary>Device engine enabled</summary>
+      <description>Audioscrobbler device reporting engine enabled</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.lastfm">
+    <key name="enabled" type="b">
+      <default>false</default>
+      <summary>Extension enabled</summary>
+      <description>Last.fm extension enabled</description>
+    </key>
+    <key name="username" type="s">
+      <default>''</default>
+      <summary>Last.fm user</summary>
+      <description>Last.fm username</description>
+    </key>
+    <key name="session-key" type="s">
+      <default>''</default>
+      <summary>Last.fm session key</summary>
+      <description>Last.fm session key used in authenticated calls</description>
+    </key>
+    <key name="subscriber" type="b">
+      <default>false</default>
+      <summary>User is Last.fm subscriber</summary>
+      <description>User is Last.fm subscriber</description>
+    </key>
+    <key name="expanded" type="b">
+      <default>false</default>
+      <summary>Last.fm expanded</summary>
+      <description>Last.fm expanded</description>
+    </key>
+    <key name="first-run" type="b">
+      <default>true</default>
+      <summary>First run</summary>
+      <description>First run of the Last.fm extension</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.miroguide">
+    <key name="last-was-audio" type="b">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.notification_area">
+    <key name="enabled" type="b">
+      <default>true</default>
+      <summary>Plugin enabled</summary>
+      <description>Notification area plugin enabled</description>
+    </key>
+    <key name="show-notifications" type="b">
+      <default>true</default>
+      <summary>Show notifications</summary>
+      <description>Show information notifications when item starts playing</description>
+    </key>
+    <key name="notify-on-close" type="b">
+      <default>true</default>
+      <summary>Show a notification when closing main window</summary>
+      <description>When the main window is closed, show a notification stating this has happened.</description>
+    </key>
+    <key name="quit-on-close" type="b">
+      <default>false</default>
+      <summary>Quit on close</summary>
+      <description>Quit instead of hide to notification area on close</description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.play_queue">
+    <key name="clear-on-quit" type="b">
+      <default>false</default>
+      <summary>Clear on Quit</summary>
+      <description>Clear the play queue when quitting</description>
+    </key>
+    <key name="populate-shuffle-mode" type="s">
+      <default>'off'</default>
+      <summary>Play Queue population mode</summary>
+      <description>How (and if) the Play Queue should be randomly populated</description>
+    </key>
+    <key name="populate-from" type="s">
+      <default>'Music'</default>
+      <summary>Source to poplulate from</summary>
+      <description>Name of the source to populate the the Play Queue from</description>
+    </key>
+    <key name="played-songs-number" type="i">
+      <default>10</default>
+      <summary>Played Songs Number</summary>
+      <description>Number of played songs to show in the Play Queue</description>
+    </key>
+    <key name="upcoming-songs-number" type="i">
+      <default>10</default>
+      <summary>Upcoming Songs Number</summary>
+      <description>Number of upcoming songs to show in the Play Queue</description>
+    </key>
+    <key name="current-track" type="i">
+      <default>0</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="current-offset" type="i">
+      <default>0</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.plugins.podcasting">
+    <key name="vpaned-position" type="i">
+      <default>120</default>
+      <summary>VPaned Position</summary>
+      <description></description>
+    </key>
+  </schema>
+  <schema id="org.gnome.banshee.sources">
+    <key name="child-sort-id" type="s">
+      <default>""</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="copy-on-import" type="b">
+      <default>false</default>
+      <summary>Copy files on import</summary>
+      <description>Copy and rename files to library directory when importing</description>
+    </key>
+    <key name="current-filters" type="as">
+      <default>[]</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="expanded" type="b">
+      <default>true</default>
+      <summary>Is source expanded</summary>
+      <description>Is source expanded</description>
+    </key>
+    <key name="library-location" type="s">
+      <default>""</default>
+      <summary>"The base directory under which files for this library are stored"</summary>
+      <description></description>
+    </key>
+    <key name="move-on-info-save" type="b">
+      <default>false</default>
+      <summary>Move files on info save</summary>
+      <description>Move files within the library directory when saving track info</description>
+    </key>
+    <key name="simplified-mode" type="b">
+      <default>false</default>
+      <summary></summary>
+      <description>Only used for Now Playing source</description>
+    </key>
+    <key name="separate-by-type" type="b">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="show-miro-guide-teaser-in-podcasts" type="b">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key name="status-format" type="i">
+      <default>0</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <!-- *-pattern duplicated from Library, only used by AudiobookLibrarySource for now -->
+    <key name="folder-pattern" type="s">
+      <default>'%album_artist%%path_sep%%album%'</default>
+      <summary>Library Folder Pattern</summary>
+      <description>Format for creating a track folder inside the library. Do not create an absolute path. Location here is relative to the Banshee music directory. See LibraryLocation. Legal tokens: %album_artist%, %track_artist%, %album%, %genre%, %title%, %track_number%, %track_count%, %track_number_nz% (No prefixed zero), %track_count_nz% (No prefixed zero), %album_artist_initial%,%path_sep% (portable directory separator (/)), %artist% (deprecated, use %album_artist%).</description>
+    </key>
+    <key name="file-pattern" type="s">
+      <default>'{%track_number%. }%title%'</default>
+      <summary>Library File Pattern</summary>
+      <description>Format for creating a track filename inside the library. Do not use path tokens/characters here. See LibraryFolderPattern. Legal tokens: %album_artist%, %track_artist%, %album%, %genre%, %title%, %track_number%, %track_count%, %track_number_nz% (No prefixed zero), %track_count_nz% (No prefixed zero), %album_artist_initial%, %artist% (deprecated, use %album_artist%).</description>
+    </key>
+  </schema>
+</schemalist>

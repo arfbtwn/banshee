@@ -1,14 +1,16 @@
 // 
-// GConfProxy.cs
+// ProxyConfiguration.cs
 // 
 // Author:
 //   Iain Lane <laney@ubuntu.com>
 //   Ting Z Zhou <ting.z.zhou@intel.com>
 //   Aaron Bockover <abockover@novell.com>
+//   Bertrand Lorentz <bertrand.lorentz@gmail.com>
 // 
 // Copyright 2010 Iain Lane
 // Copyright 2010 Intel Corp
 // Copyright 2010 Novell, Inc.
+// Copyright 2013 Bertrand Lorentz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,46 +33,50 @@
 using System;
 using System.Net;
 
+using GLib;
+
 using Hyena;
 
 namespace Banshee.GnomeBackend
 {
-    public class GConfProxy : IDisposable
+    public class ProxyConfiguration : IDisposable
     {
-        private const string PROXY = "/system/proxy";
+        private const string PROXY = "org.gnome.system.proxy";
         private const string PROXY_MODE = "mode";
-        private const string PROXY_AUTO_URL = "autoconfig_url";
-        private const string HTTP_PROXY = "/system/http_proxy";
-        private const string PROXY_USE_PROXY = "use_http_proxy";
-        private const string PROXY_USE_AUTH = "use_authentication";
+        private const string PROXY_AUTO_URL = "autoconfig-url";
+        private const string HTTP_PROXY = "org.gnome.system.proxy.http";
+        private const string PROXY_USE_PROXY = "enabled";
+        private const string PROXY_USE_AUTH = "use-authentication";
         private const string PROXY_HOST = "host";
         private const string PROXY_PORT = "port";
-        private const string PROXY_USER = "authentication_user";
-        private const string PROXY_PASSWORD = "authentication_password";
-        private const string PROXY_BYPASS_LIST = "ignore_hosts";
+        private const string PROXY_USER = "authentication-user";
+        private const string PROXY_PASSWORD = "authentication-password";
+        private const string PROXY_BYPASS_LIST = "ignore-hosts";
 
-        private GConf.Client gconf_client;
+        private Settings settings;
+        private Settings settings_http;
         private uint refresh_id;
 
-        public GConfProxy ()
+        public ProxyConfiguration ()
         {
-            gconf_client = new GConf.Client ();
-            gconf_client.AddNotify (PROXY, OnGConfNotify);
-            gconf_client.AddNotify (HTTP_PROXY, OnGConfNotify);
+            settings = new Settings (PROXY);
+            settings_http = new Settings (HTTP_PROXY);
+            //settings.ChangeEvent += OnSettingsChange;
+            //settings_http.ChangeEvent += OnSettingsChange;
 
             RefreshProxy ();
         }
 
         public void Dispose ()
         {
-            if (gconf_client != null) {
-                gconf_client.RemoveNotify (PROXY, OnGConfNotify);
-                gconf_client.RemoveNotify (HTTP_PROXY, OnGConfNotify);
-                gconf_client = null;
+            if (settings != null) {
+                //settings.ChangeEvent -= OnSettingsChange;
+                //settings_http.ChangeEvent -= OnSettingsChange;
+                settings = null;
             }
         }
 
-        private void OnGConfNotify (object o, GConf.NotifyEventArgs args)
+        private void OnSettingsChange (object o, ChangeEventArgs args)
         {
             if (refresh_id > 0) {
                 return;
@@ -82,23 +88,24 @@ namespace Banshee.GnomeBackend
             // to any of the GNOME proxy settings. Also, at any given
             // point in the modification of the settings, the state may
             // be invalid, so retain the previous good configuration.
+            // TODO: Timeout still needed ?
             refresh_id = GLib.Timeout.Add (5000, RefreshProxy);
         }
 
         private bool RefreshProxy ()
         {
-            Log.Information ("Updating web proxy from GConf");
+            Hyena.Log.Information ("Updating web proxy from GSettings");
             try {
-                HttpWebRequest.DefaultWebProxy = GetProxyFromGConf ();
+                HttpWebRequest.DefaultWebProxy = GetProxyFromSettings ();
             } catch {
-                Log.Warning ("Not updating proxy settings. Invalid state");
+                Hyena.Log.Warning ("Not updating proxy settings. Invalid state");
             }
 
             refresh_id = 0;
             return false;
         }
 
-        private T Get<T> (string @namespace, string key)
+        /*private T Get<T> (string @namespace, string key)
         {
             try {
                 return (T)gconf_client.Get (@namespace == null
@@ -107,22 +114,22 @@ namespace Banshee.GnomeBackend
             } catch {
                 return default (T);
             }
-        }
+        }*/
 
-        private WebProxy GetProxyFromGConf ()
+        private WebProxy GetProxyFromSettings ()
         {
-            var proxy_mode = Get<string> (PROXY, PROXY_MODE);
-            var proxy_auto_url = Get<string> (PROXY, PROXY_AUTO_URL);
-            var use_proxy = Get<bool> (HTTP_PROXY, PROXY_USE_PROXY);
-            var use_auth = Get<bool> (null, HTTP_PROXY);
-            var proxy_host = Get<string> (HTTP_PROXY, PROXY_HOST);
-            var proxy_port = Get<int> (HTTP_PROXY, PROXY_PORT);
-            var proxy_user = Get<string> (null, HTTP_PROXY);
-            var proxy_password = Get<string> (null, HTTP_PROXY);
-            var proxy_bypass_list = Get<string[]> (HTTP_PROXY, PROXY_BYPASS_LIST);
+            var proxy_mode = settings.GetString (PROXY_MODE);
+            var proxy_auto_url = settings.GetString (PROXY_AUTO_URL);
+            var use_proxy = settings_http.GetBoolean (PROXY_USE_PROXY);
+            var use_auth = settings_http.GetBoolean (PROXY_USE_AUTH);
+            var proxy_host = settings_http.GetString (PROXY_HOST);
+            var proxy_port = settings_http.GetInt (PROXY_PORT);
+            var proxy_user = settings_http.GetString (PROXY_USER);
+            var proxy_password = settings_http.GetString (PROXY_PASSWORD);
+            var proxy_bypass_list = settings.GetStrv (PROXY_BYPASS_LIST);
 
             if (!use_proxy || proxy_mode == "none" || String.IsNullOrEmpty (proxy_host)) {
-                Log.Debug ("Direct connection, no proxy in use");
+                Hyena.Log.Debug ("Direct connection, no proxy in use");
                 return null;
             }
 
@@ -131,9 +138,9 @@ namespace Banshee.GnomeBackend
             if (proxy_mode == "auto") {
                 if (!String.IsNullOrEmpty (proxy_auto_url)) {
                     proxy.Address = new Uri (proxy_auto_url);
-                    Log.Debug ("Automatic proxy connection", proxy.Address.AbsoluteUri);
+                    Hyena.Log.Debug ("Automatic proxy connection", proxy.Address.AbsoluteUri);
                 } else {
-                    Log.Warning ("Direct connection, no proxy in use. Proxy mode was 'auto' but no automatic configuration URL was found.");
+                    Hyena.Log.Warning ("Direct connection, no proxy in use. Proxy mode was 'auto' but no automatic configuration URL was found.");
                     return null;
                 }
             } else {
@@ -141,7 +148,7 @@ namespace Banshee.GnomeBackend
                 proxy.Credentials = use_auth
                     ? new NetworkCredential (proxy_user, proxy_password)
                     : null;
-                Log.Debug ("Manual proxy connection", proxy.Address.AbsoluteUri);
+                Hyena.Log.Debug ("Manual proxy connection", proxy.Address.AbsoluteUri);
             }
 
             if (proxy_bypass_list == null) {

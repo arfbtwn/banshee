@@ -35,7 +35,7 @@ namespace Banshee.GnomeBackend
 {
     public class GnomeService : IExtensionService, IDisposable
     {
-        private GConfProxy gconf_proxy;
+        private ProxyConfiguration proxy;
 
         private Brasero brasero;
         internal Brasero Brasero {
@@ -50,10 +50,10 @@ namespace Banshee.GnomeBackend
         {
             try {
                 // FIXME: this needs to be deferred/delayed initialized
-                gconf_proxy = new GConfProxy ();
+                proxy = new ProxyConfiguration ();
             } catch (Exception e) {
-                Hyena.Log.Error ("Problem initializing GConfProxy", e);
-                gconf_proxy = null;
+                Hyena.Log.Error ("ProxyConfiguration", e);
+                proxy = null;
             }
 
             try {
@@ -75,9 +75,9 @@ namespace Banshee.GnomeBackend
                 brasero = null;
             }
 
-            if (gconf_proxy != null) {
-                gconf_proxy.Dispose ();
-                gconf_proxy = null;
+            if (proxy != null) {
+                proxy.Dispose ();
+                proxy = null;
             }
 
             if (Browser.OpenHandler == (Banshee.Web.Browser.OpenUrlHandler) OpenUrl) {
