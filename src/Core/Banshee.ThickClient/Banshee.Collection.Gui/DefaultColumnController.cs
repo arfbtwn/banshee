@@ -68,6 +68,7 @@ namespace Banshee.Collection.Gui
             AddRange (
                 IndicatorColumn,
                 TrackColumn,
+                CoverArtColumn,
                 TitleColumn,
                 ArtistColumn,
                 AlbumColumn,
@@ -106,7 +107,10 @@ namespace Banshee.Collection.Gui
 
             // Visible-by-default column
             track_column        = Create (BansheeQuery.TrackNumberField, 0.10, true, new ColumnCellTrackNumber (null, true));
-            track_column.Title = String.Empty; // don't show any text in the header for this column, so it can be smaller
+            track_column.Title  = String.Empty; // don't show any text in the header for this column, so it can be smaller
+
+            var cover_art_desc  = new Hyena.Data.ColumnDescription(null, "Cover Art", 0.10);
+            cover_art_column    = new Column(cover_art_desc, new ColumnCellCoverArt()) { Id = "cover_art", Title = string.Empty };
 
             title_column        = CreateText (BansheeQuery.TitleField, 0.25, true);
             artist_column       = CreateText (BansheeQuery.ArtistField, 0.225, true);
@@ -348,6 +352,11 @@ namespace Banshee.Collection.Gui
         private SortableColumn license_uri_column;
         public SortableColumn LicenseUriColumn {
             get { return license_uri_column; }
+        }
+
+        private Column cover_art_column;
+        public Column CoverArtColumn {
+            get { return cover_art_column; }
         }
 
 #endregion

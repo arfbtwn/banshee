@@ -17,6 +17,7 @@ SOURCES =  \
 	Banshee.Collection.Gui/BaseTrackListView.cs \
 	Banshee.Collection.Gui/ColumnCellAlbum.cs \
 	Banshee.Collection.Gui/ColumnCellArtistText.cs \
+	Banshee.Collection.Gui/ColumnCellCoverArt.cs \
 	Banshee.Collection.Gui/ColumnCellCreativeCommons.cs \
 	Banshee.Collection.Gui/ColumnCellDateTime.cs \
 	Banshee.Collection.Gui/ColumnCellDiscAndCount.cs \
