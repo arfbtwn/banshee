@@ -46,20 +46,64 @@ namespace Banshee.Gui.Widgets
 {
     public abstract class TrackInfoDisplay : Widget
     {
-        private string current_artwork_id;
-        private bool idle;
+#pragma warning disable 660, 661
+        class ImageInfo : IDisposable
+        {
+            public static implicit operator TrackInfo    (ImageInfo data) => data?._track;
+
+            public static implicit operator ImageSurface (ImageInfo data) => data?.LoadImage ();
+
+            readonly TrackInfoDisplay _display;
+            readonly TrackInfo        _track;
+
+            ImageSurface _image;
+
+            public ImageInfo (TrackInfoDisplay display, TrackInfo track)
+            {
+                _display = display;
+                _track   = track;
+            }
+
+            ImageSurface LoadImage ()
+            {
+                if (null == _track) {
+                    return null;
+                }
+
+                if (null == _image) {
+                    var id   = _track.ArtworkId;
+                    var size = _display.ArtworkSizeRequest;
+
+                    _image = _display.ArtworkManager.LookupScaleSurface (id, size);
+                }
+
+                if (null != _image) {
+                    return _image;
+                } else {
+                    var attr = _track.MediaAttributes;
+
+                    return _display.MissingImage (attr.HasFlag (TrackMediaAttributes.VideoStream));
+                }
+            }
+
+            public void Dispose ()
+            {
+                using (_image) { }
+            }
+        }
+#pragma warning restore 660, 661
 
         private ArtworkManager artwork_manager;
         protected ArtworkManager ArtworkManager {
             get { return artwork_manager; }
         }
 
-        private ImageSurface current_image;
+        private ImageInfo current_image;
         protected ImageSurface CurrentImage {
             get { return current_image; }
         }
 
-        private ImageSurface incoming_image;
+        private ImageInfo incoming_image;
         protected ImageSurface IncomingImage {
             get { return incoming_image; }
         }
@@ -109,22 +153,17 @@ namespace Banshee.Gui.Widgets
             }
         }
 
-        private TrackInfo current_track;
-        protected TrackInfo CurrentTrack {
-            get { return current_track; }
-        }
+        private   TrackInfo current_track  => current_image;
+        protected TrackInfo CurrentTrack   => current_track;
 
-        private TrackInfo incoming_track;
-        protected TrackInfo IncomingTrack {
-            get { return incoming_track; }
-        }
+        private   TrackInfo incoming_track => incoming_image;
+        protected TrackInfo IncomingTrack  => incoming_track;
 
         private uint idle_timeout_id = 0;
         private SingleActorStage stage = new SingleActorStage ();
 
         protected TrackInfoDisplay (IntPtr native) : base (native)
         {
-            idle = true;
         }
 
         public TrackInfoDisplay ()
@@ -133,11 +172,7 @@ namespace Banshee.Gui.Widgets
             MissingVideoIconName = "video-x-generic";
             stage.Iteration += OnStageIteration;
 
-            if (ServiceManager.Contains<ArtworkManager> ()) {
-                artwork_manager = ServiceManager.Get<ArtworkManager> ();
-            }
-
-            idle = true;
+            artwork_manager = ServiceManager.Get<ArtworkManager> ();
 
             Connected = true;
             HasWindow = false;
@@ -154,7 +189,6 @@ namespace Banshee.Gui.Widgets
                     connected = value;
                     if (value) {
                         var current = ServiceManager.PlayerEngine.CurrentState;
-                        idle = current == PlayerState.Idle || current == PlayerState.NotReady || current == PlayerState.Ready;
                         ServiceManager.PlayerEngine.ConnectEvent (OnPlayerEvent,
                             PlayerEvent.StartOfStream |
                             PlayerEvent.TrackInfoUpdated |
@@ -162,8 +196,6 @@ namespace Banshee.Gui.Widgets
                     } else {
                         ServiceManager.PlayerEngine.DisconnectEvent (OnPlayerEvent);
                     }
-                } else {
-                    idle = true;
                 }
             }
         }
@@ -209,15 +241,22 @@ namespace Banshee.Gui.Widgets
 
         protected override void OnSizeAllocated (Gdk.Rectangle allocation)
         {
+            var before = ArtworkSizeRequest;
+
             base.OnSizeAllocated (allocation);
+
+            var after = ArtworkSizeRequest;
+
+            if (before == after) {
+                return;
+            }
 
             ResetMissingImages ();
 
-            if (current_track == null && !idle) {
-                LoadCurrentTrack ();
-            } else {
-                Invalidate ();
-            }
+            using (current_image) { }
+            current_image = null;
+
+            LoadCurrentTrack (true);
         }
 
         protected override void OnStyleUpdated ()
@@ -236,29 +275,11 @@ namespace Banshee.Gui.Widgets
 
         private void ResetMissingImages ()
         {
-            if (missing_audio_image != null) {
-                ((IDisposable)missing_audio_image).Dispose ();
-                var disposed = missing_audio_image;
-                missing_audio_image = null;
-                if (current_image == disposed) {
-                    current_image = MissingAudioImage;
-                }
-                if (incoming_image == disposed) {
-                    incoming_image = MissingAudioImage;
-                }
-            }
+            using (missing_audio_image) { }
+            missing_audio_image = null;
 
-            if (missing_video_image != null) {
-                ((IDisposable)missing_video_image).Dispose ();
-                var disposed = missing_video_image;
-                missing_video_image = null;
-                if (current_image == disposed) {
-                    current_image = MissingVideoImage;
-                }
-                if (incoming_image == disposed) {
-                    incoming_image = MissingVideoImage;
-                }
-            }
+            using (missing_video_image) { }
+            missing_video_image = null;
         }
 
         protected virtual void OnThemeChanged ()
@@ -269,7 +290,7 @@ namespace Banshee.Gui.Widgets
         {
             bool idle = incoming_track == null && current_track == null;
             if (!Visible || !IsMapped || (idle && !CanRenderIdle)) {
-                return true;
+                return false;
             }
 
             if (idle) {
@@ -353,11 +374,18 @@ namespace Banshee.Gui.Widgets
 
         protected virtual void RenderCoverArt (Cairo.Context cr, ImageSurface image)
         {
-            ArtworkRenderer.RenderThumbnail (cr, image, false,
-                0, ArtworkOffset,
-                ArtworkSizeRequest, ArtworkSizeRequest,
-                !IsMissingImage (image), 0.0,
-                IsMissingImage (image), BackgroundColor);
+            var missing = IsMissingImage (image);
+
+            ArtworkRenderer.RenderThumbnail (cr, image,
+                dispose:     false,
+                x:           0,
+                y:           ArtworkOffset,
+                width:       ArtworkSizeRequest,
+                height:      ArtworkSizeRequest,
+                drawBorder: !missing,
+                radius:      0.0,
+                fill:        missing,
+                fillColor:   BackgroundColor);
         }
 
         protected virtual bool IsWithinCoverart (int x, int y)
@@ -370,7 +398,7 @@ namespace Banshee.Gui.Widgets
 
         protected bool IsMissingImage (ImageSurface pb)
         {
-            return pb == missing_audio_image || pb == missing_video_image;
+            return pb == null || pb == MissingAudioImage || pb == MissingVideoImage;
         }
 
         protected virtual void InvalidateCache ()
@@ -394,11 +422,10 @@ namespace Banshee.Gui.Widgets
         private void OnPlayerEvent (PlayerEventArgs args)
         {
             if (args.Event == PlayerEvent.StartOfStream) {
-                idle = false;
                 LoadCurrentTrack ();
             } else if (args.Event == PlayerEvent.TrackInfoUpdated) {
                 LoadCurrentTrack (true);
-            } else if (args.Event == PlayerEvent.StateChange && (incoming_track != null || incoming_image != null)) {
+            } else if (args.Event == PlayerEvent.StateChange) {
                 PlayerEventStateChangeArgs state = (PlayerEventStateChangeArgs)args;
                 if (state.Current == PlayerState.Idle) {
                     if (idle_timeout_id == 0) {
@@ -413,13 +440,13 @@ namespace Banshee.Gui.Widgets
             if (ServiceManager.PlayerEngine == null ||
                 ServiceManager.PlayerEngine.CurrentTrack == null ||
                 ServiceManager.PlayerEngine.CurrentState == PlayerState.Idle) {
-                incoming_track = null;
-                incoming_image = null;
 
-                current_artwork_id = null;
-                current_track = null;
-                current_image = null;
-                idle = true;
+                using (current_image)
+                using (incoming_image)
+                {
+                }
+
+                current_image = incoming_image = null;
 
                 if (stage != null && stage.Actor == null) {
                     stage.Reset ();
@@ -439,47 +466,14 @@ namespace Banshee.Gui.Widgets
         {
             TrackInfo track = ServiceManager.PlayerEngine.CurrentTrack;
 
-            if (track == current_track && !IsMissingImage (current_image) && !force_reload) {
-                return;
-            } else if (track == null) {
-                incoming_track = null;
-                incoming_image = null;
-                return;
+            if (force_reload || track != incoming_track) {
+                using (incoming_image) { }
+
+                incoming_image = new ImageInfo (this, track);
             }
-
-            incoming_track = track;
-
-            LoadImage (track, force_reload);
 
             if (stage.Actor == null) {
                 stage.Reset ();
-            }
-        }
-
-        private void LoadImage (TrackInfo track, bool force)
-        {
-            LoadImage (track.MediaAttributes, track.ArtworkId, force);
-
-            if (track == current_track) {
-                if (current_image != null && current_image != incoming_image && !IsMissingImage (current_image)) {
-                    ((IDisposable)current_image).Dispose ();
-                }
-                current_image = incoming_image;
-            }
-        }
-
-        protected void LoadImage (TrackMediaAttributes attr, string artwork_id, bool force)
-        {
-            if (current_artwork_id != artwork_id || force) {
-                current_artwork_id = artwork_id;
-                if (incoming_image != null && current_image != incoming_image && !IsMissingImage (incoming_image)) {
-                    ((IDisposable)incoming_image).Dispose ();
-                }
-                incoming_image = artwork_manager.LookupScaleSurface (artwork_id, ArtworkSizeRequest);
-            }
-
-            if (incoming_image == null) {
-                incoming_image = MissingImage ((attr & TrackMediaAttributes.VideoStream) != 0);
             }
         }
 
@@ -505,14 +499,9 @@ namespace Banshee.Gui.Widgets
                 Log.DebugFormat ("TrackInfoDisplay RenderAnimation: {0:0.00} FPS", last_fps);
             }
 
-            if (current_image != null && current_image != incoming_image && !IsMissingImage (current_image)) {
-                ((IDisposable)current_image).Dispose ();
-            }
-
+            using (current_image) { }
             current_image = incoming_image;
-            current_track = incoming_track;
-
-            incoming_track = null;
+            incoming_image = null;
 
             OnArtworkChanged ();
         }
