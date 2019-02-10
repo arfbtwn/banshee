@@ -13,7 +13,7 @@ audioprofiles_in_files = \
 audioprofiles_DATA = $(audioprofiles_in_files:.xml.in=.xml)
 
 %.xml: %.xml.in
-	GETTEXTDATADIRS=$(top_builddir) $(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
+	GETTEXTDATADIR=$(top_builddir) $(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 all: $(audioprofiles_DATA)
 	mkdir -p $(top_builddir)/bin/share/$(PACKAGE)/audio-profiles && cp $(audioprofiles_DATA) $(top_builddir)/bin/share/$(PACKAGE)/audio-profiles
